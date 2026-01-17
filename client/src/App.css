@@ -362,3 +362,31 @@
   font-size: 0.95rem;
   text-align: center;
 }
+
+/* Footer */
+.app-footer {
+  margin-top: 60px;
+  padding: 30px 20px;
+  background: rgba(20, 20, 30, 0.95);
+  border-top: 3px solid #ffd700;
+  backdrop-filter: blur(10px);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-content p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.footer-content strong {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}

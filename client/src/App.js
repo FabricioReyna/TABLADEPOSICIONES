@@ -207,6 +207,13 @@ function AppContent() {
           <div className="loading">No hay torneo disponible</div>
         )}
       </div>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <div className="footer-content">
+          <p>© 2026 <strong>Boantek</strong> - Todos los derechos reservados</p>
+        </div>
+      </footer>
     </div>
   );
 }
