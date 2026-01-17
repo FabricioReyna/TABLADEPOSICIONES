@@ -11,29 +11,46 @@ function generarJornadas(clanes, fechaInicio) {
   let fechaActual = new Date(fechaInicio);
   
   for (let i = 1; i <= 7; i++) {
-    // Mezclar clanes para cada jornada
-    const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
+    let equiposDia1, equiposDia2;
+    
+    // Jornada 7 es especial - Playoff
+    if (i === 7) {
+      // Para la jornada 7, los equipos se organizarán según la tabla de posiciones
+      // Los top 6 pelean entre ellos (día 1)
+      // Los bottom 6 (del 7 al 12) pelean entre ellos (día 2)
+      // Nota: La organización real se hará cuando la jornada esté lista para jugarse
+      // Por ahora dejamos los equipos mezclados como placeholder
+      const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
+      equiposDia1 = shuffled.slice(0, 6);
+      equiposDia2 = shuffled.slice(6, 12);
+    } else {
+      // Jornadas normales: mezclar clanes
+      const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
+      equiposDia1 = shuffled.slice(0, 6);
+      equiposDia2 = shuffled.slice(6, 12);
+    }
     
     // Día 1: primeros 6 equipos (3 partidos 1 vs 1)
     const dia1Fecha = new Date(fechaActual);
-    const equiposDia1 = shuffled.slice(0, 6);
     
     // Día 2: siguientes 6 equipos (3 partidos 1 vs 1)
     fechaActual.setDate(fechaActual.getDate() + 1);
     const dia2Fecha = new Date(fechaActual);
-    const equiposDia2 = shuffled.slice(6, 12);
     
     jornadas.push({
       numero: i,
+      esPlayoff: i === 7,
       dia1: {
         fecha: dia1Fecha,
         equipos: equiposDia1,
-        resultados: []
+        resultados: [],
+        descripcion: i === 7 ? 'TOP 6 - Playoff' : null
       },
       dia2: {
         fecha: dia2Fecha,
         equipos: equiposDia2,
-        resultados: []
+        resultados: [],
+        descripcion: i === 7 ? 'Posiciones 7-12' : null
       }
     });
     

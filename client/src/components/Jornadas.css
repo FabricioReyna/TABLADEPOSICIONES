@@ -190,6 +190,42 @@
   box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
 }
 
+.jornada-card.jornada-playoff {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(255, 215, 0, 0.1) 100%);
+  box-shadow: 0 4px 25px rgba(255, 215, 0, 0.4);
+}
+
+.jornada-card.jornada-playoff .jornada-header {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(26, 26, 26, 0.8) 100%);
+}
+
+.btn-organizar-playoff {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+  color: #000;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-right: 10px;
+}
+
+.btn-organizar-playoff:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6);
+  background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+}
+
+.btn-organizar-playoff:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .jornada-card:hover {
   border-color: #555;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);

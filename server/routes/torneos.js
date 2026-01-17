@@ -389,4 +389,64 @@ router.delete('/:id/clanes/:nombreClan', async (req, res) => {
   }
 });
 
+// Organizar Jornada 7 - Playoff especial
+router.post('/:id/organizar-playoff', async (req, res) => {
+  try {
+    const torneo = await Torneo.findById(req.params.id);
+    
+    if (!torneo) {
+      return res.status(404).json({ mensaje: 'Torneo no encontrado' });
+    }
+
+    // Ordenar equipos por puntos (descendente), luego por ganados
+    const tablaOrdenada = [...torneo.tablaPosiciones].sort((a, b) => {
+      if (b.puntos !== a.puntos) return b.puntos - a.puntos;
+      return b.ganados - a.ganados;
+    });
+
+    // Top 6 equipos
+    const top6 = tablaOrdenada.slice(0, 6).map(e => e.clan);
+    // Bottom 6 equipos (posiciones 7-12)
+    const bottom6 = tablaOrdenada.slice(6, 12).map(e => e.clan);
+
+    // Mezclar cada grupo para los enfrentamientos
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    const top6Shuffled = shuffleArray(top6);
+    const bottom6Shuffled = shuffleArray(bottom6);
+
+    // Encontrar jornada 7
+    const jornada7Index = torneo.jornadas.findIndex(j => j.numero === 7);
+    
+    if (jornada7Index === -1) {
+      return res.status(404).json({ mensaje: 'Jornada 7 no encontrada' });
+    }
+
+    // Actualizar equipos de la jornada 7
+    torneo.jornadas[jornada7Index].dia1.equipos = top6Shuffled;
+    torneo.jornadas[jornada7Index].dia2.equipos = bottom6Shuffled;
+    torneo.jornadas[jornada7Index].esPlayoff = true;
+    torneo.jornadas[jornada7Index].dia1.descripcion = '🏆 TOP 6 - Playoff Final';
+    torneo.jornadas[jornada7Index].dia2.descripcion = '⚔️ Posiciones 7-12';
+
+    await torneo.save();
+
+    res.json({
+      mensaje: 'Jornada 7 organizada exitosamente',
+      top6: top6Shuffled,
+      bottom6: bottom6Shuffled,
+      torneo
+    });
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al organizar playoff', error: error.message });
+  }
+});
+
 module.exports = router;

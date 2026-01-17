@@ -192,7 +192,23 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       setGuardando(false);
     }
   };
-
+  // Organizar Playoff (Jornada 7)
+  const organizarPlayoff = async () => {
+    setGuardando(true);
+    try {
+      const response = await axios.post(`/api/torneos/${torneoId}/organizar-playoff`);
+      setToast({ 
+        mensaje: `🏆 Jornada 7 organizada! Top 6 vs Posiciones 7-12`, 
+        tipo: 'success' 
+      });
+      onUpdate();
+    } catch (error) {
+      console.error('Error al organizar playoff:', error);
+      setToast({ mensaje: 'Error al organizar el playoff', tipo: 'error' });
+    } finally {
+      setGuardando(false);
+    }
+  };
   // Separar jornadas activas y completadas
   const jornadasActivas = jornadasTemp.filter(j => !j.completada);
   const jornadasCompletadas = jornadasTemp.filter(j => j.completada);
@@ -219,19 +235,34 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
           <div className="jornadas-list">
             {jornadas.map((jornada) => {
               const completa = esJornadaCompleta(jornada);
+              const esJornada7 = jornada.numero === 7;
               return (
-                <div key={jornada.numero} className={`jornada-card ${completa && !jornada.completada ? 'jornada-lista' : ''}`}>
+                <div key={jornada.numero} className={`jornada-card ${completa && !jornada.completada ? 'jornada-lista' : ''} ${esJornada7 ? 'jornada-playoff' : ''}`}>
                   <div 
                     className="jornada-header"
                     onClick={() => toggleJornada(jornada.numero)}
                   >
                     <div className="jornada-titulo">
                       <span className="jornada-numero">
-                        Jornada {jornada.numero}
+                        {esJornada7 ? '🏆 ' : ''}Jornada {jornada.numero}
+                        {esJornada7 && ' - PLAYOFF FINAL'}
                         {completa && !jornada.completada && ' ✓'}
                       </span>
                     </div>
                     <div className="jornada-header-right">
+                      {esJornada7 && puedeEditar && (
+                        <button 
+                          className="btn-organizar-playoff"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            organizarPlayoff();
+                          }}
+                          disabled={guardando}
+                          title="Organizar equipos según tabla de posiciones"
+                        >
+                          🎯 Organizar Playoff
+                        </button>
+                      )}
                       {completa && !jornada.completada && puedeEditar && (
                         <button 
                           className="btn-finalizar-jornada"
