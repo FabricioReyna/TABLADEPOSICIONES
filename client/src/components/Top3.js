@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './Top3.css';
 
@@ -26,7 +26,7 @@ function Top3() {
     titulo: params.get('titulo') || 'TOP'
   };
 
-  const cargarDatos = async () => {
+  const cargarDatos = useCallback(async () => {
     try {
       // Obtener torneo activo
       const torneoRes = await axios.get('https://tabladeposiciones.onrender.com/api/torneos/activo');
@@ -49,7 +49,7 @@ function Top3() {
       console.error('Error al cargar datos:', error);
       setLoading(false);
     }
-  };
+  }, [config.cantidad]);
 
   useEffect(() => {
     // Cargar datos inicialmente
@@ -59,7 +59,7 @@ function Top3() {
     const interval = setInterval(cargarDatos, config.velocidad * 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [cargarDatos, config.velocidad]);
 
   const obtenerClaseEspecial = (nombreClan) => {
     const nombreLower = nombreClan.toLowerCase();
