@@ -4,6 +4,11 @@ import Toast from './Toast';
 import ModalConfirmacion from './ModalConfirmacion';
 import './GestionClanes.css';
 
+const USE_CLOUD = process.env.REACT_APP_USE_CLOUD === '1';
+const API_BASE_URL = USE_CLOUD 
+  ? process.env.REACT_APP_API_URL_CLOUD 
+  : process.env.REACT_APP_API_URL_LOCAL;
+
 function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
   const [editando, setEditando] = useState(null);
   const [nombreEditado, setNombreEditado] = useState('');
@@ -22,7 +27,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.put(`/api/torneos/${torneoId}/clanes/${editando}`, {
+      await axios.put(`${API_BASE_URL}/api/torneos/${torneoId}/clanes/${editando}`, {
         nuevoNombre: nombreEditado.trim()
       });
       setToast({ mensaje: 'Clan actualizado exitosamente', tipo: 'success' });
@@ -43,7 +48,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.delete(`/api/torneos/${torneoId}/clanes/${nombreClan}`);
+      await axios.delete(`${API_BASE_URL}/api/torneos/${torneoId}/clanes/${nombreClan}`);
       setToast({ mensaje: 'Clan eliminado exitosamente', tipo: 'success' });
       onUpdate();
     } catch (error) {
@@ -60,7 +65,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.post(`/api/torneos/${torneoId}/clanes`, {
+      await axios.post(`${API_BASE_URL}/api/torneos/${torneoId}/clanes`, {
         nombre: nuevoClan.trim()
       });
       setToast({ mensaje: 'Clan agregado exitosamente', tipo: 'success' });

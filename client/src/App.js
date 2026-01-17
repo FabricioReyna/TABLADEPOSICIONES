@@ -36,7 +36,7 @@ function AppContent() {
   // Obtener el torneo de clanes
   const fetchTorneo = async () => {
     try {
-      const response = await axios.get('/api/torneos');
+      const response = await axios.get(`${API_URL}/api/torneos`);
       if (response.data && response.data.length > 0) {
         setTorneo(response.data[0]);
       }

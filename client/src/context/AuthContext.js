@@ -1,6 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+const USE_CLOUD = process.env.REACT_APP_USE_CLOUD === '1';
+const API_BASE_URL = USE_CLOUD 
+  ? process.env.REACT_APP_API_URL_CLOUD 
+  : process.env.REACT_APP_API_URL_LOCAL;
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -32,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/usuarios/login', {
+      const response = await axios.post(`${API_BASE_URL}/api/usuarios/login`, {
         email,
         password
       });
@@ -71,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
   const registro = async (nombre, email, password) => {
     try {
-      const response = await axios.post('/api/usuarios/registro', {
+      const response = await axios.post(`${API_BASE_URL}/api/usuarios/registro`, {
         nombre,
         email,
         password
