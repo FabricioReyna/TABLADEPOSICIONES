@@ -62,7 +62,7 @@ function generarJornadas(clanes, fechaInicio) {
 }
 
 // Datos iniciales
-const clanes = ['501th', 'ROIER', 'Focus', 'vahalla', 'Stormentados', 'resistencia', 'Nia', 'Core', 'ALEXBY', 'VEGETTA', 'WILLY', 'KOKITOS'];
+const clanes = ['501th', 'ROIER', 'Focus', 'vahalla', 'Stormentados', 'resistencia', 'Nia', 'Core', 'ALEXBY', 'Lobos Nocturnos (Vegetta)', 'Hermandad Oscuro (WillyREX)', 'KOKITOS'];
 const fechaInicio = new Date('2026-02-15');
 
 const torneos = [
