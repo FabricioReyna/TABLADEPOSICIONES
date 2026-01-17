@@ -25,7 +25,7 @@ function AppContent() {
   const [torneo, setTorneo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mostrarLogin, setMostrarLogin] = useState(false);
-  const [vistaActiva, setVistaActiva] = useState('tabla'); // 'tabla' o 'jornadas'
+  const [vistaActiva, setVistaActiva] = useState('tabla'); // 'tabla', 'jornadas', 'clanes', 'obs'
   const [mostrarInfo, setMostrarInfo] = useState(true);
   const { estaAutenticado, esAdmin } = useAuth();
 
@@ -101,6 +101,12 @@ function AppContent() {
             👥 Gestión de Clanes
           </button>
         )}
+        <button 
+          className={`vista-btn ${vistaActiva === 'obs' ? 'activo' : ''}`}
+          onClick={() => setVistaActiva('obs')}
+        >
+          📺 URL para OBS
+        </button>
       </div>
 
       <div className="container">
@@ -149,6 +155,57 @@ function AppContent() {
                 onUpdate={handleUpdateTorneo}
                 puedeEditar={estaAutenticado && esAdmin()}
               />
+            )}
+
+            {vistaActiva === 'obs' && (
+              <div className="obs-info-container">
+                <h2>📺 URL para OBS Studio</h2>
+                <p>Copia esta URL y úsala como "Browser Source" en OBS para mostrar el TOP 3 en vivo:</p>
+                
+                <div className="url-card">
+                  <h3>🌐 URL Producción</h3>
+                  <div className="url-box">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={`${window.location.origin}/top3`}
+                      onClick={(e) => e.target.select()}
+                    />
+                    <button 
+                      className="btn-copy"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/top3`);
+                        alert('✅ URL copiada al portapapeles!');
+                      }}
+                    >
+                      📋 Copiar
+                    </button>
+                  </div>
+                </div>
+
+                <div className="obs-instructions">
+                  <h3>📌 Instrucciones para OBS:</h3>
+                  <ol>
+                    <li>En OBS, click derecho en "Fuentes" → <strong>"Agregar" → "Navegador"</strong></li>
+                    <li>Pega la URL copiada arriba</li>
+                    <li>Tamaño recomendado: <strong>600 x 400</strong> (ajusta según necesites)</li>
+                    <li>Marca <strong>"Actualizar navegador cuando la escena se activa"</strong> (opcional)</li>
+                    <li>¡Listo! Se actualizará automáticamente cada 10 segundos</li>
+                  </ol>
+                </div>
+
+                <div className="obs-preview">
+                  <h3>👁️ Vista Previa:</h3>
+                  <a 
+                    href="/top3" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="btn-preview"
+                  >
+                    🔗 Abrir vista previa en nueva pestaña
+                  </a>
+                </div>
+              </div>
             )}
           </>
         ) : (
