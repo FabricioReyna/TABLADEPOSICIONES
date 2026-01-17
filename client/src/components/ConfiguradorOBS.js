@@ -60,9 +60,6 @@ function ConfiguradorOBS() {
   return (
     <div className="configurador-container">
       <h1>🎨 Configurador OBS - Tabla de Posiciones</h1>
-      <p className="configurador-descripcion">
-        Personaliza cómo se verá tu tabla en OBS y copia la URL generada
-      </p>
 
       <div className="configurador-grid">
         {/* Columna izquierda - Opciones */}
@@ -307,6 +304,21 @@ function ConfiguradorOBS() {
               📊 Tabla Completa
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="configurador-footer">
+        <div className="footer-info">
+          <p className="footer-descripcion">
+            🎮 Personaliza cómo se verá tu tabla en OBS y copia la URL generada
+          </p>
+          <p className="footer-clanes">
+            📊 Soporte para hasta 12 clanes simultáneos
+          </p>
+        </div>
+        <div className="footer-copyright">
+          <p>© 2026 <strong>Boantek</strong> - Todos los derechos reservados</p>
         </div>
       </div>
     </div>
