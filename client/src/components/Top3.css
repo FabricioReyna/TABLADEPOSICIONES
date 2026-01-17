@@ -35,6 +35,28 @@
   box-shadow: none !important;
 }
 
+/* Modo transparente completo - Sin fondos en ningún elemento */
+.transparente .top3-header {
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.transparente .top3-row {
+  background: transparent !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+}
+
+.transparente .top3-row:hover {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.transparente .top3-footer {
+  background: transparent !important;
+  border-top-color: transparent !important;
+}
+
 /* Tamaños de fuente */
 .fuente-pequeña {
   font-size: 0.85em;
