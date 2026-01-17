@@ -94,14 +94,14 @@
 
 /* ALEXBY - Azul */
 .tabla-posiciones tbody tr.alexby-row {
-  background: linear-gradient(90deg, rgba(30, 144, 255, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  background: linear-gradient(90deg, rgba(0, 30, 80, 0.6) 0%, rgba(26, 26, 26, 0) 100%);
   border-left: 4px solid #1e90ff;
 }
 
 .tabla-posiciones tbody tr.alexby-row .clan-name {
-  color: #0d0d0d;
+  color: #87ceeb;
   font-weight: 900;
-  text-shadow: 0 0 10px rgba(30, 144, 255, 0.3);
+  text-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
 }
 
 /* ROIER - Rojo */
