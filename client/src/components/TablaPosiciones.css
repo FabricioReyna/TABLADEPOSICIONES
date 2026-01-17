@@ -62,7 +62,6 @@
 
 .tabla-posiciones tbody tr.vegetta-row {
   background: linear-gradient(90deg, rgba(138, 43, 226, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #8a2be2;
 }
 
 .tabla-posiciones tbody tr.vegetta-row .clan-name {
@@ -73,7 +72,6 @@
 /* WILLYREX - Verde claro */
 .tabla-posiciones tbody tr.willy-row {
   background: linear-gradient(90deg, rgba(144, 238, 144, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #90ee90;
 }
 
 .tabla-posiciones tbody tr.willy-row .clan-name {
@@ -84,7 +82,6 @@
 /* NIA - Rosa */
 .tabla-posiciones tbody tr.nia-row {
   background: linear-gradient(90deg, rgba(255, 105, 180, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #ff69b4;
 }
 
 .tabla-posiciones tbody tr.nia-row .clan-name {
@@ -95,7 +92,6 @@
 /* ALEXBY - Azul */
 .tabla-posiciones tbody tr.alexby-row {
   background: linear-gradient(90deg, rgba(0, 30, 80, 0.6) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #1e90ff;
 }
 
 .tabla-posiciones tbody tr.alexby-row .clan-name {
@@ -107,7 +103,6 @@
 /* ROIER - Rojo */
 .tabla-posiciones tbody tr.roier-row {
   background: linear-gradient(90deg, rgba(220, 20, 60, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #dc143c;
 }
 
 .tabla-posiciones tbody tr.roier-row .clan-name {
@@ -118,7 +113,6 @@
 /* FOCUS - Marrón */
 .tabla-posiciones tbody tr.focus-row {
   background: linear-gradient(90deg, rgba(139, 69, 19, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #8b4513;
 }
 
 .tabla-posiciones tbody tr.focus-row .clan-name {
