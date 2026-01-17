@@ -196,7 +196,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   const organizarPlayoff = async () => {
     setGuardando(true);
     try {
-      const response = await axios.post(`/api/torneos/${torneoId}/organizar-playoff`);
+      await axios.post(`/api/torneos/${torneoId}/organizar-playoff`);
       setToast({ 
         mensaje: `🏆 Jornada 7 organizada! Top 6 vs Posiciones 7-12`, 
         tipo: 'success' 
