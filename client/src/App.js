@@ -9,8 +9,21 @@ import Navbar from './components/Navbar';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import axios from 'axios';
 
-// Configurar la URL base de la API
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || '';
+// ========================================
+// 🔄 CONFIGURACIÓN AUTOMÁTICA DE LA API
+// ========================================
+// Cambia REACT_APP_USE_CLOUD en .env para elegir:
+// 0 = LOCAL (localhost:5000)
+// 1 = NUBE (Render API)
+
+const USE_CLOUD = process.env.REACT_APP_USE_CLOUD === '1';
+const API_URL = USE_CLOUD 
+  ? process.env.REACT_APP_API_URL_CLOUD 
+  : process.env.REACT_APP_API_URL_LOCAL;
+
+axios.defaults.baseURL = API_URL;
+
+console.log(`🔌 Conectando a: ${USE_CLOUD ? '☁️ NUBE' : '💻 LOCAL'} - ${API_URL}`);
 
 function AppContent() {
   const [torneo, setTorneo] = useState(null);

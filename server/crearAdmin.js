@@ -5,10 +5,7 @@ const Usuario = require('./models/Usuario');
 async function crearAdmin() {
   try {
     // Conectar a MongoDB
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Conectado a MongoDB');
 
     // Verificar si ya existe un admin
