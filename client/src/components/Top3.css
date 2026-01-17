@@ -4,10 +4,77 @@
   min-height: 400px;
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  /* Fondo semitransparente - puedes cambiar a transparent para OBS */
   background: rgba(26, 26, 46, 0.95);
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Fondos configurables */
+.bg-dark {
+  background: rgba(26, 26, 46, 0.95) !important;
+}
+
+.bg-black {
+  background: rgba(0, 0, 0, 0.95) !important;
+}
+
+.bg-blue {
+  background: rgba(20, 30, 60, 0.95) !important;
+}
+
+.bg-purple {
+  background: rgba(60, 20, 80, 0.95) !important;
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(60, 20, 80, 0.95)) !important;
+}
+
+.transparente {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Tamaños de fuente */
+.fuente-pequeña {
+  font-size: 0.85em;
+}
+
+.fuente-normal {
+  font-size: 1em;
+}
+
+.fuente-grande {
+  font-size: 1.2em;
+}
+
+.fuente-extragrande {
+  font-size: 1.4em;
+}
+
+/* Bordes */
+.con-borde {
+  border: 3px solid #ffd700;
+}
+
+.sin-borde {
+  border: none;
+}
+
+/* Animaciones */
+.con-animaciones .top3-row {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Header */

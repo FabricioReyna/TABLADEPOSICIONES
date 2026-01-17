@@ -318,3 +318,47 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
 }
+
+/* Configurador OBS */
+.obs-configurador-link {
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(255, 215, 0, 0.2));
+  border-radius: 12px;
+  margin-bottom: 30px;
+  border: 2px solid #ffd700;
+}
+
+.btn-configurador {
+  display: inline-block;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  border-radius: 10px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+}
+
+.btn-configurador:hover {
+  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
+}
+
+.configurador-descripcion {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.url-info {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  text-align: center;
+}

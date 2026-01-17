@@ -8,6 +8,7 @@ import GestionClanes from './components/GestionClanes';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import Top3 from './components/Top3';
+import ConfiguradorOBS from './components/ConfiguradorOBS';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import axios from 'axios';
 
@@ -159,11 +160,25 @@ function AppContent() {
 
             {vistaActiva === 'obs' && (
               <div className="obs-info-container">
-                <h2>📺 URL para OBS Studio</h2>
-                <p>Copia esta URL y úsala como "Browser Source" en OBS para mostrar el TOP 3 en vivo:</p>
+                <h2>🎨 Configurador Personalizado OBS</h2>
+                <p>Personaliza cómo quieres que se vea tu tabla en OBS Studio con todas las opciones disponibles:</p>
                 
+                <div className="obs-configurador-link">
+                  <a 
+                    href="/configurador-obs" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="btn-configurador"
+                  >
+                    🚀 Abrir Configurador Completo
+                  </a>
+                  <p className="configurador-descripcion">
+                    ✨ Opciones: tamaño, colores, transparencia, animaciones, y mucho más
+                  </p>
+                </div>
+
                 <div className="url-card">
-                  <h3>🌐 URL Producción</h3>
+                  <h3>⚡ URL Rápida (configuración por defecto)</h3>
                   <div className="url-box">
                     <input 
                       type="text" 
@@ -181,28 +196,29 @@ function AppContent() {
                       📋 Copiar
                     </button>
                   </div>
+                  <p className="url-info">Esta URL muestra el TOP 3 con la configuración estándar</p>
                 </div>
 
                 <div className="obs-instructions">
                   <h3>📌 Instrucciones para OBS:</h3>
                   <ol>
-                    <li>En OBS, click derecho en "Fuentes" → <strong>"Agregar" → "Navegador"</strong></li>
-                    <li>Pega la URL copiada arriba</li>
-                    <li>Tamaño recomendado: <strong>600 x 400</strong> (ajusta según necesites)</li>
-                    <li>Marca <strong>"Actualizar navegador cuando la escena se activa"</strong> (opcional)</li>
-                    <li>¡Listo! Se actualizará automáticamente cada 10 segundos</li>
+                    <li>Usa el <strong>Configurador Completo</strong> para personalizar tu tabla</li>
+                    <li>Copia la URL generada</li>
+                    <li>En OBS: <strong>Fuentes → Agregar → Navegador</strong></li>
+                    <li>Pega la URL y ajusta el tamaño (recomendado: 600x400)</li>
+                    <li>¡Se actualizará automáticamente!</li>
                   </ol>
                 </div>
 
                 <div className="obs-preview">
-                  <h3>👁️ Vista Previa:</h3>
+                  <h3>👁️ Vista Previa Rápida:</h3>
                   <a 
                     href="/top3" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="btn-preview"
                   >
-                    🔗 Abrir vista previa en nueva pestaña
+                    🔗 Ver TOP 3 por defecto
                   </a>
                 </div>
               </div>
@@ -223,6 +239,7 @@ function App() {
         <Routes>
           <Route path="/" element={<AppContent />} />
           <Route path="/top3" element={<Top3 />} />
+          <Route path="/configurador-obs" element={<ConfiguradorOBS />} />
         </Routes>
       </Router>
     </AuthProvider>

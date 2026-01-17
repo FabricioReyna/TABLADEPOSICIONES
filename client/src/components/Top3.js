@@ -3,9 +3,28 @@ import axios from 'axios';
 import './Top3.css';
 
 function Top3() {
-  const [top3, setTop3] = useState([]);
+  const [topClanes, setTopClanes] = useState([]);
   const [torneoActivo, setTorneoActivo] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Leer configuración desde URL params
+  const params = new URLSearchParams(window.location.search);
+  const config = {
+    cantidad: parseInt(params.get('cantidad') || '3'),
+    bg: params.get('bg') || 'dark',
+    transparente: params.get('transparente') === 'true',
+    mostrarMedallas: params.get('medallas') !== 'false',
+    mostrarNumeros: params.get('numeros') !== 'false',
+    mostrarPuntos: params.get('puntos') !== 'false',
+    mostrarVictorias: params.get('victorias') !== 'false',
+    mostrarFooter: params.get('footer') !== 'false',
+    coloresClan: params.get('coloresClan') !== 'false',
+    velocidad: parseInt(params.get('velocidad') || '10'),
+    tamañoFuente: params.get('fuente') || 'normal',
+    animaciones: params.get('animaciones') !== 'false',
+    borde: params.get('borde') !== 'false',
+    titulo: params.get('titulo') || 'TOP'
+  };
 
   const cargarDatos = async () => {
     try {
@@ -22,8 +41,8 @@ function Top3() {
           return a.clan.localeCompare(b.clan);
         });
 
-        // Tomar solo los 3 primeros
-        setTop3(clanesOrdenados.slice(0, 3));
+        // Tomar la cantidad configurada
+        setTopClanes(clanesOrdenados.slice(0, config.cantidad));
       }
       setLoading(false);
     } catch (error) {
@@ -36,8 +55,8 @@ function Top3() {
     // Cargar datos inicialmente
     cargarDatos();
 
-    // Actualizar cada 10 segundos
-    const interval = setInterval(cargarDatos, 10000);
+    // Actualizar según velocidad configurada
+    const interval = setInterval(cargarDatos, config.velocidad * 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -64,7 +83,7 @@ function Top3() {
 
   if (loading) {
     return (
-      <div className="top3-container">
+      <div className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''}`}>
         <div className="top3-loading">Cargando...</div>
       </div>
     );
@@ -72,47 +91,53 @@ function Top3() {
 
   if (!torneoActivo) {
     return (
-      <div className="top3-container">
+      <div className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''}`}>
         <div className="top3-no-data">No hay torneo activo</div>
       </div>
     );
   }
 
   return (
-    <div className="top3-container">
+    <div className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''} fuente-${config.tamañoFuente} ${config.animaciones ? 'con-animaciones' : ''} ${config.borde ? 'con-borde' : 'sin-borde'}`}>
       <div className="top3-header">
-        <h1>🏆 TOP 3</h1>
+        <h1>🏆 {config.titulo} {config.cantidad}</h1>
         <h2>{torneoActivo.nombre}</h2>
       </div>
 
       <div className="top3-table">
-        {top3.map((clanData, index) => (
+        {topClanes.map((clanData, index) => (
           <div 
             key={index} 
-            className={`top3-row ${obtenerClaseEspecial(clanData.clan)}`}
+            className={`top3-row ${config.coloresClan ? obtenerClaseEspecial(clanData.clan) : ''}`}
           >
             <div className="top3-posicion">
-              <span className="medalla">{obtenerMedalla(index)}</span>
-              <span className="numero">#{index + 1}</span>
+              {config.mostrarMedallas && <span className="medalla">{obtenerMedalla(index)}</span>}
+              {config.mostrarNumeros && <span className="numero">#{index + 1}</span>}
             </div>
             <div className="top3-clan">{clanData.clan}</div>
             <div className="top3-stats">
-              <div className="stat">
-                <span className="stat-valor">{clanData.puntos}</span>
-                <span className="stat-label">PTS</span>
-              </div>
-              <div className="stat">
-                <span className="stat-valor">{clanData.ganados}</span>
-                <span className="stat-label">V</span>
-              </div>
+              {config.mostrarPuntos && (
+                <div className="stat">
+                  <span className="stat-valor">{clanData.puntos}</span>
+                  <span className="stat-label">PTS</span>
+                </div>
+              )}
+              {config.mostrarVictorias && (
+                <div className="stat">
+                  <span className="stat-valor">{clanData.ganados}</span>
+                  <span className="stat-label">V</span>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="top3-footer">
-        Actualización automática cada 10s
-      </div>
+      {config.mostrarFooter && (
+        <div className="top3-footer">
+          Actualización cada {config.velocidad}s
+        </div>
+      )}
     </div>
   );
 }

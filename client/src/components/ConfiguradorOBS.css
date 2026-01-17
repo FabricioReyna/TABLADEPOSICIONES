@@ -1,0 +1,267 @@
+.configurador-container {
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 30px;
+  background: rgba(20, 20, 30, 0.95);
+  border-radius: 15px;
+  color: white;
+}
+
+.configurador-container h1 {
+  text-align: center;
+  color: #ffd700;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.configurador-descripcion {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.configurador-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.configurador-opciones,
+.configurador-resultado {
+  background: rgba(30, 30, 40, 0.8);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.seccion {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(40, 40, 50, 0.6);
+  border-radius: 10px;
+  border-left: 4px solid #ffd700;
+}
+
+.seccion h2 {
+  color: #87cefa;
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.opcion {
+  margin-bottom: 20px;
+}
+
+.opcion label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.opcion select,
+.opcion input[type="text"] {
+  width: 100%;
+  padding: 10px 15px;
+  background: rgba(20, 20, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.opcion input[type="range"] {
+  width: calc(100% - 60px);
+  margin-right: 10px;
+}
+
+.valor-actual {
+  display: inline-block;
+  min-width: 50px;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.opcion-checkbox {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.opcion-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.opcion-checkbox label {
+  margin: 0;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.seccion-url {
+  background: rgba(40, 40, 50, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #ffd700;
+}
+
+.seccion-url h2 {
+  color: #ffd700;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.url-display {
+  margin-bottom: 15px;
+}
+
+.url-display input {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(20, 20, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #90ee90;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-copiar-grande {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-copiar-grande:hover {
+  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.seccion-preview {
+  background: rgba(40, 40, 50, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.seccion-preview h2 {
+  color: #90ee90;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.preview-info {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 15px;
+}
+
+.btn-preview-grande {
+  display: inline-block;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #8a2be2 0%, #9d4edd 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-preview-grande:hover {
+  background: linear-gradient(135deg, #9d4edd 0%, #8a2be2 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+}
+
+.seccion-instrucciones {
+  background: rgba(40, 40, 50, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #87cefa;
+}
+
+.seccion-instrucciones h2 {
+  color: #87cefa;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.seccion-instrucciones ol {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  padding-left: 25px;
+  margin: 0;
+}
+
+.seccion-instrucciones li {
+  margin-bottom: 8px;
+}
+
+.seccion-instrucciones strong {
+  color: #ffd700;
+}
+
+.seccion-presets {
+  background: rgba(40, 40, 50, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.seccion-presets h2 {
+  color: #ff6b6b;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.seccion-presets button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 12px;
+  background: rgba(60, 60, 80, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seccion-presets button:hover {
+  background: rgba(80, 80, 100, 0.9);
+  border-color: #ffd700;
+  transform: translateX(5px);
+}
+
+@media (max-width: 1200px) {
+  .configurador-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .configurador-container {
+    padding: 20px;
+  }
+  
+  .configurador-container h1 {
+    font-size: 2rem;
+  }
+}
