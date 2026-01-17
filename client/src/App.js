@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import TorneoInfo from './components/TorneoInfo';
 import TablaPosiciones from './components/TablaPosiciones';
 import Jornadas from './components/Jornadas';
 import GestionClanes from './components/GestionClanes';
@@ -27,7 +26,6 @@ function AppContent() {
   const [loading, setLoading] = useState(true);
   const [mostrarLogin, setMostrarLogin] = useState(false);
   const [vistaActiva, setVistaActiva] = useState('tabla'); // 'tabla', 'jornadas', 'clanes', 'obs'
-  const [mostrarInfo, setMostrarInfo] = useState(true);
   const { estaAutenticado, esAdmin } = useAuth();
 
   // Obtener el torneo de clanes
@@ -115,29 +113,10 @@ function AppContent() {
           <div className="loading">Cargando torneo...</div>
         ) : torneo ? (
           <>
-            <div className="info-toggle-container">
-              <button 
-                className="btn-toggle-info"
-                onClick={() => setMostrarInfo(!mostrarInfo)}
-                title={mostrarInfo ? 'Ocultar información del torneo' : 'Mostrar información del torneo'}
-              >
-                {mostrarInfo ? '👁️ Ocultar Info' : '👁️ Mostrar Info'}
-              </button>
-            </div>
-
-            {mostrarInfo && <TorneoInfo torneo={torneo} />}
-            
-            {vistaActiva === 'tabla' && mostrarInfo && (
+            {vistaActiva === 'tabla' && (
               <TablaPosiciones 
                 tablaPosiciones={torneo.tablaPosiciones} 
               />
-            )}
-            
-            {vistaActiva === 'tabla' && !mostrarInfo && (
-              <div className="vista-oculta-mensaje">
-                <p>📊 Tabla de posiciones oculta</p>
-                <small>Haz clic en "Mostrar Info" para verla</small>
-              </div>
             )}
             
             {vistaActiva === 'jornadas' && (
