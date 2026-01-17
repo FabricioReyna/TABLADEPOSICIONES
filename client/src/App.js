@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import TorneoInfo from './components/TorneoInfo';
 import TablaPosiciones from './components/TablaPosiciones';
@@ -6,6 +7,7 @@ import Jornadas from './components/Jornadas';
 import GestionClanes from './components/GestionClanes';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
+import Top3 from './components/Top3';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import axios from 'axios';
 
@@ -160,7 +162,12 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <Router>
+        <Routes>
+          <Route path="/" element={<AppContent />} />
+          <Route path="/top3" element={<Top3 />} />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }

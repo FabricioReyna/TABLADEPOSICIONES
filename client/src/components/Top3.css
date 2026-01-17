@@ -1,0 +1,201 @@
+/* Contenedor principal - Fondo transparente para OBS */
+.top3-container {
+  width: 600px;
+  min-height: 400px;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Fondo semitransparente - puedes cambiar a transparent para OBS */
+  background: rgba(26, 26, 46, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+.top3-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #ffd700;
+}
+
+.top3-header h1 {
+  font-size: 48px;
+  margin: 0;
+  color: #ffd700;
+  text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.5);
+  font-weight: bold;
+}
+
+.top3-header h2 {
+  font-size: 24px;
+  margin: 10px 0 0;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Tabla */
+.top3-table {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Filas */
+.top3-row {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.top3-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Posición */
+.top3-posicion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  min-width: 60px;
+}
+
+.medalla {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.numero {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-top: 5px;
+}
+
+/* Nombre del clan */
+.top3-clan {
+  flex: 1;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Estadísticas */
+.top3-stats {
+  display: flex;
+  gap: 25px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.stat-valor {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ffd700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 3px;
+}
+
+/* Clases especiales de clanes con colores */
+.vegetta-row {
+  background: rgba(138, 43, 226, 0.3) !important;
+  border-color: #8a2be2 !important;
+}
+
+.vegetta-row .top3-clan {
+  color: #dda0ff;
+}
+
+.willy-row {
+  background: rgba(144, 238, 144, 0.3) !important;
+  border-color: #90ee90 !important;
+}
+
+.willy-row .top3-clan {
+  color: #c8ffc8;
+}
+
+.nia-row {
+  background: rgba(255, 192, 203, 0.3) !important;
+  border-color: #ffc0cb !important;
+}
+
+.nia-row .top3-clan {
+  color: #ffddee;
+}
+
+.alexby-row {
+  background: rgba(135, 206, 250, 0.3) !important;
+  border-color: #87cefa !important;
+}
+
+.alexby-row .top3-clan {
+  color: #b3e0ff;
+}
+
+.roier-row {
+  background: rgba(255, 99, 71, 0.3) !important;
+  border-color: #ff6347 !important;
+}
+
+.roier-row .top3-clan {
+  color: #ffb3a0;
+}
+
+.focus-row {
+  background: rgba(139, 69, 19, 0.3) !important;
+  border-color: #8b4513 !important;
+}
+
+.focus-row .top3-clan {
+  color: #cd853f;
+}
+
+/* Footer */
+.top3-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+/* Estados de carga */
+.top3-loading,
+.top3-no-data {
+  text-align: center;
+  font-size: 24px;
+  color: #ffffff;
+  padding: 60px 20px;
+}
+
+/* Fondo completamente transparente para OBS (opcional) */
+/* Descomenta estas líneas si quieres transparencia total */
+/*
+.top3-container {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.top3-row {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+*/
