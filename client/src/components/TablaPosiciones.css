@@ -114,15 +114,15 @@
   text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
 }
 
-/* FOCUS - Negro/Gris oscuro */
+/* FOCUS - Marrón */
 .tabla-posiciones tbody tr.focus-row {
-  background: linear-gradient(90deg, rgba(80, 80, 80, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
-  border-left: 4px solid #505050;
+  background: linear-gradient(90deg, rgba(139, 69, 19, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #8b4513;
 }
 
 .tabla-posiciones tbody tr.focus-row .clan-name {
-  color: #a9a9a9;
-  text-shadow: 0 0 10px rgba(80, 80, 80, 0.5);
+  color: #cd853f;
+  text-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
 }
 
 .tabla-posiciones td {
