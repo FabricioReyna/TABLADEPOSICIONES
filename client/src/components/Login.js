@@ -135,22 +135,6 @@ function Login({ onLoginSuccess }) {
               : '¿No tienes cuenta? Regístrate'}
           </button>
         </div>
-
-        <div className="credenciales-demo">
-          <h3>🔐 Credenciales de Prueba</h3>
-          <div className="demo-cards">
-            <div className="demo-card">
-              <strong>Admin</strong>
-              <p>admin@torneo.com</p>
-              <p>admin123</p>
-            </div>
-            <div className="demo-card">
-              <strong>Usuario</strong>
-              <p>usuario@torneo.com</p>
-              <p>usuario123</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
