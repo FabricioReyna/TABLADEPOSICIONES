@@ -1,0 +1,15 @@
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  REACT_APP_USE_CLOUD = "1"
+  REACT_APP_API_URL_CLOUD = "https://tabladeposiciones.onrender.com"
+  REACT_APP_API_URL_LOCAL = "http://localhost:5000"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
