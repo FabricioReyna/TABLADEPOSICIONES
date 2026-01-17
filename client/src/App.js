@@ -9,6 +9,9 @@ import Navbar from './components/Navbar';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import axios from 'axios';
 
+// Configurar la URL base de la API
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || '';
+
 function AppContent() {
   const [torneo, setTorneo] = useState(null);
   const [loading, setLoading] = useState(true);
