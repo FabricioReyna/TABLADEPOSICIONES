@@ -375,10 +375,6 @@
 .app-footer {
   margin-top: auto;
   padding: 30px 20px;
-  background: rgba(20, 20, 30, 0.95);
-  border-top: 3px solid #ffd700;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .footer-content {
@@ -398,4 +394,68 @@
   font-weight: bold;
   font-size: 1.1rem;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 20px 15px;
+  }
+
+  .login-prompt {
+    padding: 10px 15px;
+  }
+
+  .btn-login-header {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+
+  .container {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .app-footer {
+    padding: 20px 15px;
+  }
+
+  .footer-content p {
+    font-size: 0.9rem;
+  }
+
+  .footer-content strong {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header {
+    padding: 15px 10px;
+  }
+
+  .login-prompt {
+    padding: 8px 10px;
+  }
+
+  .btn-login-header {
+    padding: 6px 15px;
+    font-size: 0.85rem;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .app-footer {
+    padding: 15px 10px;
+  }
+
+  .footer-content p {
+    font-size: 0.85rem;
+  }
+
+  .footer-content strong {
+    font-size: 0.95rem;
+  }
 }
