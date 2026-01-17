@@ -99,8 +99,9 @@
 }
 
 .tabla-posiciones tbody tr.alexby-row .clan-name {
-  color: #4169e1;
-  text-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+  color: #0d0d0d;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(30, 144, 255, 0.3);
 }
 
 /* ROIER - Rojo */
