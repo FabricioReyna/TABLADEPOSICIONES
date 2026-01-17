@@ -102,6 +102,7 @@
 
 .container {
   max-width: 1800px;
+  width: 95%;
   margin: 40px auto;
   padding: 0 20px;
 }
