@@ -14,12 +14,12 @@ function Top3() {
       const torneo = torneoRes.data;
       setTorneoActivo(torneo);
 
-      if (torneo && torneo.clanes) {
-        // Ordenar clanes por puntos y victorias
-        const clanesOrdenados = [...torneo.clanes].sort((a, b) => {
+      if (torneo && torneo.tablaPosiciones) {
+        // Ordenar clanes por puntos y partidos ganados
+        const clanesOrdenados = [...torneo.tablaPosiciones].sort((a, b) => {
           if (b.puntos !== a.puntos) return b.puntos - a.puntos;
-          if (b.victorias !== a.victorias) return b.victorias - a.victorias;
-          return a.nombre.localeCompare(b.nombre);
+          if (b.ganados !== a.ganados) return b.ganados - a.ganados;
+          return a.clan.localeCompare(b.clan);
         });
 
         // Tomar solo los 3 primeros
@@ -42,8 +42,8 @@ function Top3() {
     return () => clearInterval(interval);
   }, []);
 
-  const obtenerClaseEspecial = (nombre) => {
-    const nombreLower = nombre.toLowerCase();
+  const obtenerClaseEspecial = (nombreClan) => {
+    const nombreLower = nombreClan.toLowerCase();
     if (nombreLower.includes('vegetta')) return 'vegetta-row';
     if (nombreLower.includes('willy')) return 'willy-row';
     if (nombreLower.includes('nia')) return 'nia-row';
@@ -86,23 +86,23 @@ function Top3() {
       </div>
 
       <div className="top3-table">
-        {top3.map((clan, index) => (
+        {top3.map((clanData, index) => (
           <div 
-            key={clan._id} 
-            className={`top3-row ${obtenerClaseEspecial(clan.nombre)}`}
+            key={index} 
+            className={`top3-row ${obtenerClaseEspecial(clanData.clan)}`}
           >
             <div className="top3-posicion">
               <span className="medalla">{obtenerMedalla(index)}</span>
               <span className="numero">#{index + 1}</span>
             </div>
-            <div className="top3-clan">{clan.nombre}</div>
+            <div className="top3-clan">{clanData.clan}</div>
             <div className="top3-stats">
               <div className="stat">
-                <span className="stat-valor">{clan.puntos}</span>
+                <span className="stat-valor">{clanData.puntos}</span>
                 <span className="stat-label">PTS</span>
               </div>
               <div className="stat">
-                <span className="stat-valor">{clan.victorias}</span>
+                <span className="stat-valor">{clanData.ganados}</span>
                 <span className="stat-label">V</span>
               </div>
             </div>
