@@ -155,6 +155,7 @@ function ConfiguradorOBS() {
                 <option value="blue">Azul</option>
                 <option value="purple">Morado</option>
                 <option value="gradient">Degradado</option>
+                <option value="transparent">Transparente</option>
               </select>
             </div>
 

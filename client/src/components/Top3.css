@@ -30,6 +30,32 @@
   background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(60, 20, 80, 0.95)) !important;
 }
 
+.bg-transparent {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.bg-transparent .top3-header {
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.bg-transparent .top3-row {
+  background: transparent !important;
+  border-color: transparent !important;
+  backdrop-filter: none !important;
+}
+
+.bg-transparent .top3-row:hover {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.bg-transparent .top3-footer {
+  background: transparent !important;
+  border-top-color: transparent !important;
+}
+
 .transparente {
   background: transparent !important;
   box-shadow: none !important;
