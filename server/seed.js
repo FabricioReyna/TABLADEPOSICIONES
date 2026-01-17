@@ -1,0 +1,109 @@
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+// Importar el modelo de Torneo
+const Torneo = require('./models/Torneo');
+
+// Función para generar jornadas
+function generarJornadas(clanes, fechaInicio) {
+  const jornadas = [];
+  const clonesArray = [...clanes];
+  let fechaActual = new Date(fechaInicio);
+  
+  for (let i = 1; i <= 7; i++) {
+    // Mezclar clanes para cada jornada
+    const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
+    
+    // Día 1: primeros 6 equipos (3 partidos 1 vs 1)
+    const dia1Fecha = new Date(fechaActual);
+    const equiposDia1 = shuffled.slice(0, 6);
+    
+    // Día 2: siguientes 6 equipos (3 partidos 1 vs 1)
+    fechaActual.setDate(fechaActual.getDate() + 1);
+    const dia2Fecha = new Date(fechaActual);
+    const equiposDia2 = shuffled.slice(6, 12);
+    
+    jornadas.push({
+      numero: i,
+      dia1: {
+        fecha: dia1Fecha,
+        equipos: equiposDia1,
+        resultados: []
+      },
+      dia2: {
+        fecha: dia2Fecha,
+        equipos: equiposDia2,
+        resultados: []
+      }
+    });
+    
+    // Avanzar al siguiente inicio (después de 2 días)
+    fechaActual.setDate(fechaActual.getDate() + 1);
+  }
+  
+  return jornadas;
+}
+
+// Datos iniciales
+const clanes = ['501th', 'ROIER', 'Focus', 'vahalla', 'Stormentados', 'resistencia', 'Nia', 'Core', 'ALEXBY', 'VEGETTA', 'WILLY', 'KOKITOS'];
+const fechaInicio = new Date('2026-02-15');
+
+const torneos = [
+  {
+    nombre: 'Torneo de Clanes 2026',
+    descripcion: 'Torneo competitivo entre los mejores clanes',
+    fecha: fechaInicio,
+    ubicacion: 'Arena Principal',
+    equipos: clanes,
+    estado: 'activo',
+    tablaPosiciones: clanes.map(clan => ({
+      clan: clan,
+      puntos: 0,
+      partidos: 0,
+      ganados: 0,
+      perdidos: 0
+    })),
+    jornadas: generarJornadas(clanes, fechaInicio)
+  }
+];
+
+// Función para poblar la base de datos
+async function seedDatabase() {
+  try {
+    // Conectar a MongoDB
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('✅ Conectado a MongoDB');
+
+    // Limpiar la colección de torneos
+    await Torneo.deleteMany({});
+    console.log('🗑️  Base de datos limpiada');
+
+    // Insertar torneos
+    const torneosCreados = await Torneo.insertMany(torneos);
+    console.log(`✅ Torneo creado exitosamente`);
+
+    // Mostrar el torneo creado
+    console.log('\n📋 Torneo de Clanes creado:');
+    torneosCreados.forEach((torneo) => {
+      console.log(`\n🏆 ${torneo.nombre}`);
+      console.log(`   📅 Fecha: ${torneo.fecha.toLocaleDateString('es-ES')}`);
+      console.log(`   📍 Ubicación: ${torneo.ubicacion}`);
+      console.log(`   👥 Clanes participantes (${torneo.equipos.length}):`);
+      torneo.equipos.forEach((clan, i) => {
+        console.log(`      ${i + 1}. ${clan}`);
+      });
+    });
+
+    console.log('\n✅ Base de datos poblada correctamente');
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error al poblar la base de datos:', error);
+    process.exit(1);
+  }
+}
+
+// Ejecutar la función
+seedDatabase();

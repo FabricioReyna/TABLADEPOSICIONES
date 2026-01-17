@@ -1,0 +1,148 @@
+.tabla-posiciones-container {
+  background: rgba(25, 25, 25, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
+  border: 1px solid rgba(60, 60, 60, 0.5);
+}
+
+.tabla-posiciones-container h2 {
+  margin-bottom: 30px;
+  color: #ffffff;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.empty-tabla {
+  text-align: center;
+  padding: 40px;
+  color: #ccc;
+  font-size: 1.2rem;
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+  border-radius: 16px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+.tabla-posiciones {
+  width: 100%;
+  border-collapse: collapse;
+  background: #2a2a2a; 
+}
+
+.tabla-posiciones thead {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  color: white;
+  border-bottom: 2px solid #444;
+}
+
+.tabla-posiciones th {
+  padding: 18px 15px;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.tabla-posiciones tbody tr {
+  border-bottom: 1px solid #333;
+}
+
+.tabla-posiciones tbody tr.top-three {
+  background: linear-gradient(90deg, rgba(60, 60, 60, 0.4) 0%, rgba(26, 26, 26, 0) 100%);
+}
+
+.tabla-posiciones tbody tr.vegetta-row {
+  background: linear-gradient(90deg, rgba(138, 43, 226, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #8a2be2;
+}
+
+.tabla-posiciones tbody tr.vegetta-row .clan-name {
+  color: #ba55d3;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.tabla-posiciones td {
+  padding: 18px 15px;
+  text-align: center;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.posicion {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.clan-name {
+  text-align: left !important;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.ganados {
+  color: #4caf50;
+  font-weight: 700;
+}
+
+.perdidos {
+  color: #f44336;
+  font-weight: 700;
+}
+
+.puntos {
+  background: linear-gradient(135deg, #2d2d2d 0%, #444 100%);
+  color: white;
+  font-weight: 900;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.tabla-leyenda {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #333;
+  flex-wrap: wrap;
+}
+
+.tabla-leyenda span {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.tabla-leyenda strong {
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .tabla-posiciones-container {
+    padding: 20px;
+  }
+
+  .tabla-posiciones th,
+  .tabla-posiciones td {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+  }
+
+  .clan-name {
+    font-size: 0.95rem;
+  }
+
+  .tabla-leyenda {
+    gap: 15px;
+  }
+}

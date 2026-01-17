@@ -1,0 +1,286 @@
+.gestion-clanes-container {
+  background: rgba(25, 25, 25, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(60, 60, 60, 0.5);
+}
+
+.gestion-clanes-container h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.gestion-clanes-container h3 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.info-panel {
+  background: rgba(35, 35, 35, 0.7);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(80, 80, 80, 0.4);
+}
+
+.info-panel p {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin: 8px 0;
+}
+
+.info-panel strong {
+  color: #4caf50;
+}
+
+.agregar-clan-section {
+  background: rgba(35, 35, 35, 0.5);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 30px;
+  border: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.agregar-clan-form {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.agregar-clan-form input {
+  flex: 1;
+  min-width: 250px;
+  padding: 15px 20px;
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.agregar-clan-form input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+.agregar-clan-form button {
+  padding: 15px 35px;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  border: none;
+  color: white;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.agregar-clan-form button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+}
+
+.agregar-clan-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.clanes-list-section {
+  background: rgba(35, 35, 35, 0.5);
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.clanes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.clan-item {
+  background: #1a1a1a;
+  border: 2px solid rgba(60, 60, 60, 0.5);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.clan-item:hover {
+  border-color: #555;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.clan-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.clan-nombre {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.clan-stats {
+  color: #aaa;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.clan-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-editar,
+.btn-eliminar {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-editar {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  color: white;
+}
+
+.btn-editar:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.btn-eliminar {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  color: white;
+}
+
+.btn-eliminar:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+}
+
+.btn-editar:disabled,
+.btn-eliminar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.clan-edit {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.clan-edit input {
+  flex: 1;
+  padding: 12px 20px;
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid #4caf50;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.clan-edit input:focus {
+  outline: none;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
+.clan-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-guardar-edit,
+.btn-cancelar-edit {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-guardar-edit {
+  background: #4caf50;
+}
+
+.btn-guardar-edit:hover:not(:disabled) {
+  background: #45a049;
+  transform: scale(1.1);
+}
+
+.btn-cancelar-edit {
+  background: #f44336;
+}
+
+.btn-cancelar-edit:hover:not(:disabled) {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+.btn-guardar-edit:disabled,
+.btn-cancelar-edit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .gestion-clanes-container {
+    padding: 20px;
+  }
+
+  .clan-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .clan-actions {
+    width: 100%;
+  }
+
+  .btn-editar,
+  .btn-eliminar {
+    flex: 1;
+  }
+
+  .agregar-clan-form {
+    flex-direction: column;
+  }
+
+  .agregar-clan-form input,
+  .agregar-clan-form button {
+    width: 100%;
+  }
+}
