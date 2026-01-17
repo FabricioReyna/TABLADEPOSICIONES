@@ -62,24 +62,25 @@ function AppContent() {
   // Mostrar la aplicación (con o sin autenticación)
   return (
     <div className="App">
-      {estaAutenticado ? (
-        <Navbar />
-      ) : (
-        <div className="login-prompt">
-          <button 
-            className="btn-login-header" 
-            onClick={() => setMostrarLogin(true)}
-          >
-            🔑 Iniciar Sesión
-          </button>
-        </div>
-      )}
-      <header className="App-header">
-        <h1>🏆 Torneo de Clanes 2026</h1>
-      </header>
+      <div className="app-content-wrapper">
+        {estaAutenticado ? (
+          <Navbar />
+        ) : (
+          <div className="login-prompt">
+            <button 
+              className="btn-login-header" 
+              onClick={() => setMostrarLogin(true)}
+            >
+              🔑 Iniciar Sesión
+            </button>
+          </div>
+        )}
+        <header className="App-header">
+          <h1>🏆 Torneo de Clanes 2026</h1>
+        </header>
 
-      {/* Navbar de navegación entre vistas */}
-      <div className="vista-navbar">
+        {/* Navbar de navegación entre vistas */}
+        <div className="vista-navbar">
         <button 
           className={`vista-btn ${vistaActiva === 'tabla' ? 'activo' : ''}`}
           onClick={() => setVistaActiva('tabla')}
@@ -206,6 +207,7 @@ function AppContent() {
         ) : (
           <div className="loading">No hay torneo disponible</div>
         )}
+      </div>
       </div>
 
       {/* Footer */}
