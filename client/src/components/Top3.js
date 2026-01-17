@@ -10,7 +10,7 @@ function Top3() {
   const cargarDatos = async () => {
     try {
       // Obtener torneo activo
-      const torneoRes = await axios.get('/api/torneos/activo');
+      const torneoRes = await axios.get('https://tabladeposiciones.onrender.com/api/torneos/activo');
       const torneo = torneoRes.data;
       setTorneoActivo(torneo);
 
