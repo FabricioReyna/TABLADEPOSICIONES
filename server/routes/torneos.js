@@ -12,6 +12,19 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Obtener el torneo activo (DEBE IR ANTES DE /:id)
+router.get('/activo', async (req, res) => {
+  try {
+    const torneo = await Torneo.findOne({ estado: 'activo' }).sort({ fecha: -1 });
+    if (!torneo) {
+      return res.status(404).json({ mensaje: 'No hay torneo activo' });
+    }
+    res.json(torneo);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener torneo activo', error: error.message });
+  }
+});
+
 // Obtener un torneo por ID
 router.get('/:id', async (req, res) => {
   try {
