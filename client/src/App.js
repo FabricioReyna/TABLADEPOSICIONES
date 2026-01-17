@@ -9,12 +9,6 @@ import Navbar from './components/Navbar';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import axios from 'axios';
 
-// ========================================
-// 🔄 CONFIGURACIÓN AUTOMÁTICA DE LA API
-// ========================================
-// Cambia REACT_APP_USE_CLOUD en .env para elegir:
-// 0 = LOCAL (localhost:5000)
-// 1 = NUBE (Render API)
 
 const USE_CLOUD = process.env.REACT_APP_USE_CLOUD === '1';
 const API_URL = USE_CLOUD 
@@ -36,7 +30,7 @@ function AppContent() {
   // Obtener el torneo de clanes
   const fetchTorneo = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/torneos`);
+      const response = await axios.get('https://tabladeposiciones.onrender.com/api/torneos');
       if (response.data && response.data.length > 0) {
         setTorneo(response.data[0]);
       }

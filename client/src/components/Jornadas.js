@@ -4,11 +4,6 @@ import Toast from './Toast';
 import ModalConfirmacion from './ModalConfirmacion';
 import './Jornadas.css';
 
-const USE_CLOUD = process.env.REACT_APP_USE_CLOUD === '1';
-const API_BASE_URL = USE_CLOUD 
-  ? process.env.REACT_APP_API_URL_CLOUD 
-  : process.env.REACT_APP_API_URL_LOCAL;
-
 function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   const [jornadaExpandida, setJornadaExpandida] = useState(null);
   const [jornadasTemp, setJornadasTemp] = useState(jornadas);
@@ -21,15 +16,6 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   useEffect(() => {
     setJornadasTemp(jornadas);
   }, [jornadas]);
-
-  const formatearFecha = (fecha) => {
-    return new Date(fecha).toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
 
   const toggleJornada = (numero) => {
     setJornadaExpandida(jornadaExpandida === numero ? null : numero);
@@ -97,7 +83,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
 
     // Actualizar puntos en el backend inmediatamente
     try {
-      await axios.post(`${API_BASE_URL}/api/torneos/${torneoId}/actualizar-resultado`, {
+      await axios.post(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/actualizar-resultado`, {
         jornadaNumero,
         dia,
         indicePartido,
@@ -132,7 +118,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
     setGuardando(true);
     try {
       // Calcular puntos y actualizar tabla
-      await axios.post(`${API_BASE_URL}/api/torneos/${torneoId}/finalizar-jornada`, {
+      await axios.post(`/api/torneos/${torneoId}/finalizar-jornada`, {
         jornadaNumero,
         resultados: {
           dia1: jornada.dia1.resultados,
@@ -179,7 +165,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   const guardarJornadas = async () => {
     setGuardando(true);
     try {
-      await axios.put(`${API_BASE_URL}/api/torneos/${torneoId}/jornadas`, {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/jornadas`, {
         jornadas: jornadasTemp
       });
       setToast({ mensaje: 'Jornadas guardadas exitosamente', tipo: 'success' });
@@ -196,7 +182,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
     setModalReiniciar(false);
     setGuardando(true);
     try {
-      await axios.post(`${API_BASE_URL}/api/torneos/${torneoId}/reiniciar`);
+      await axios.post(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/reiniciar`);
       setToast({ mensaje: 'Torneo reiniciado exitosamente', tipo: 'success' });
       onUpdate();
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ModalConfirmacion.css';
 
 function ModalConfirmacion({ titulo, mensaje, onConfirmar, onCancelar, tipo = 'danger' }) {

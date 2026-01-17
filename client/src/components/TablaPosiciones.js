@@ -34,11 +34,26 @@ function TablaPosiciones({ tablaPosiciones }) {
           </thead>
           <tbody>
             {tablaOrdenada.map((equipo, index) => {
-              const isVegetta = equipo.clan.toLowerCase().includes('vegeta');
+              const clanLower = equipo.clan.toLowerCase();
+              const isVegetta = clanLower.includes('vegetta');
+              const isWilly = clanLower.includes('willy');
+              const isNia = clanLower.includes('nia');
+              const isAlexby = clanLower.includes('alexby');
+              const isRoier = clanLower.includes('roier');
+              const isFocus = clanLower.includes('focus');
+              
+              let specialClass = '';
+              if (isVegetta) specialClass = 'vegetta-row';
+              else if (isWilly) specialClass = 'willy-row';
+              else if (isNia) specialClass = 'nia-row';
+              else if (isAlexby) specialClass = 'alexby-row';
+              else if (isRoier) specialClass = 'roier-row';
+              else if (isFocus) specialClass = 'focus-row';
+              
               return (
                 <tr 
                   key={equipo.clan || index} 
-                  className={`${index < 3 ? 'top-three' : ''} ${isVegetta ? 'vegetta-row' : ''}`}
+                  className={`${index < 3 ? 'top-three' : ''} ${specialClass}`}
                 >
                   <td className="posicion">
                     {index === 0 && '🥇'}

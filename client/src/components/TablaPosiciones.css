@@ -70,6 +70,61 @@
   text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
 }
 
+/* WILLYREX - Verde claro */
+.tabla-posiciones tbody tr.willy-row {
+  background: linear-gradient(90deg, rgba(144, 238, 144, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #90ee90;
+}
+
+.tabla-posiciones tbody tr.willy-row .clan-name {
+  color: #98fb98;
+  text-shadow: 0 0 10px rgba(144, 238, 144, 0.5);
+}
+
+/* NIA - Rosa */
+.tabla-posiciones tbody tr.nia-row {
+  background: linear-gradient(90deg, rgba(255, 105, 180, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #ff69b4;
+}
+
+.tabla-posiciones tbody tr.nia-row .clan-name {
+  color: #ffb6c1;
+  text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+}
+
+/* ALEXBY - Azul */
+.tabla-posiciones tbody tr.alexby-row {
+  background: linear-gradient(90deg, rgba(30, 144, 255, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #1e90ff;
+}
+
+.tabla-posiciones tbody tr.alexby-row .clan-name {
+  color: #4169e1;
+  text-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+}
+
+/* ROIER - Rojo */
+.tabla-posiciones tbody tr.roier-row {
+  background: linear-gradient(90deg, rgba(220, 20, 60, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #dc143c;
+}
+
+.tabla-posiciones tbody tr.roier-row .clan-name {
+  color: #ff6347;
+  text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+}
+
+/* FOCUS - Negro/Gris oscuro */
+.tabla-posiciones tbody tr.focus-row {
+  background: linear-gradient(90deg, rgba(80, 80, 80, 0.3) 0%, rgba(26, 26, 26, 0) 100%);
+  border-left: 4px solid #505050;
+}
+
+.tabla-posiciones tbody tr.focus-row .clan-name {
+  color: #a9a9a9;
+  text-shadow: 0 0 10px rgba(80, 80, 80, 0.5);
+}
+
 .tabla-posiciones td {
   padding: 18px 15px;
   text-align: center;
