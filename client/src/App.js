@@ -161,7 +161,7 @@ function AppContent() {
                   <h3>⚡ URL Rápida (configuración por defecto)</h3>
                   <div className="url-box">
                     <input 
-                      type="text" 
+                      type="password" 
                       readOnly 
                       value={`${window.location.origin}/top3`}
                       onClick={(e) => e.target.select()}
