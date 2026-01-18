@@ -74,15 +74,6 @@ function Top3() {
     return '';
   };
 
-  const obtenerMedalla = (posicion) => {
-    switch(posicion) {
-      case 0: return '🥇';
-      case 1: return '🥈';
-      case 2: return '🥉';
-      default: return '';
-    }
-  };
-
   if (loading) {
     return (
       <div 
