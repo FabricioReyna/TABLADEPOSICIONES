@@ -225,3 +225,131 @@
 .top3-table::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* Modo Slider */
+.modo-slider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slider-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.slider-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 80%;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slider-posicion {
+  font-size: 24px;
+  color: #888;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.numero-grande {
+  font-size: 28px;
+}
+
+.slider-clan {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.slider-puntos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: #252525;
+  padding: 16px 32px;
+  border-radius: 8px;
+}
+
+.puntos-valor {
+  font-size: 48px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+}
+
+.puntos-label {
+  font-size: 14px;
+  color: #888;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.slider-indicadores {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.indicador {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.indicador.activo {
+  background: #fff;
+  width: 24px;
+  border-radius: 5px;
+}
+
+/* Colores especiales para slider */
+.slider-item.vegetta-row {
+  border-left: 4px solid #7cfc00;
+}
+
+.slider-item.willy-row {
+  border-left: 4px solid #ff69b4;
+}
+
+.slider-item.nia-row {
+  border-left: 4px solid #ffc0cb;
+}
+
+.slider-item.alexby-row {
+  border-left: 4px solid #87cefa;
+}
+
+.slider-item.roier-row {
+  border-left: 4px solid #ff6347;
+}
+
+.slider-item.focus-row {
+  border-left: 4px solid #cd853f;
+}

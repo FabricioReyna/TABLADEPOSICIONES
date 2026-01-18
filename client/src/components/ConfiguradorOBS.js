@@ -1,29 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ConfiguradorOBS.css';
 
 function ConfiguradorOBS() {
-  const [config, setConfig] = useState({
-    cantidad: 3,
-    bg: 'dark',
-    transparente: false,
-    medallas: true,
-    numeros: true,
-    puntos: true,
-    victorias: true,
-    footer: true,
-    coloresClan: true,
-    velocidad: 10,
-    fuente: 'normal',
-    animaciones: true,
-    borde: true,
-    titulo: 'TOP',
-    ancho: 600,
-    altura: 600
-  });
+  // Cargar configuración guardada o usar valores por defecto
+  const configGuardada = localStorage.getItem('obsConfig');
+  const tamanoPreviewGuardado = localStorage.getItem('tamanoPreview');
+  
+  const [config, setConfig] = useState(
+    configGuardada ? JSON.parse(configGuardada) : {
+      cantidad: 3,
+      bg: 'dark',
+      transparente: false,
+      medallas: true,
+      numeros: true,
+      puntos: true,
+      victorias: true,
+      footer: true,
+      coloresClan: true,
+      velocidad: 10,
+      fuente: 'normal',
+      animaciones: true,
+      borde: true,
+      titulo: 'TOP',
+      ancho: 600,
+      altura: 600,
+      modo: 'tabla',
+      tiempoSlider: 5
+    }
+  );
 
-  const [tamanoPreview, setTamanoPreview] = useState(300);
+  const [tamanoPreview, setTamanoPreview] = useState(
+    tamanoPreviewGuardado ? parseInt(tamanoPreviewGuardado) : 500
+  );
 
   const [urlCopiada, setUrlCopiada] = useState(false);
+
+  // Guardar configuración cuando cambie
+  useEffect(() => {
+    localStorage.setItem('obsConfig', JSON.stringify(config));
+  }, [config]);
+
+  // Guardar tamaño de preview cuando cambie
+  useEffect(() => {
+    localStorage.setItem('tamanoPreview', tamanoPreview.toString());
+  }, [tamanoPreview]);
 
   const handleChange = (key, value) => {
     setConfig({ ...config, [key]: value });
@@ -51,6 +71,8 @@ function ConfiguradorOBS() {
     if (config.titulo !== 'TOP') params.append('titulo', config.titulo);
     if (config.ancho !== 600) params.append('ancho', config.ancho);
     if (config.altura !== 600) params.append('altura', config.altura);
+    if (config.modo !== 'tabla') params.append('modo', config.modo);
+    if (config.tiempoSlider !== 5) params.append('tiempoSlider', config.tiempoSlider);
 
     const queryString = params.toString();
     return queryString ? `${baseURL}?${queryString}` : baseURL;
@@ -73,6 +95,29 @@ function ConfiguradorOBS() {
           <div className="seccion">
             <h2>📊 Contenido</h2>
             
+            <div className="opcion">
+              <label>Modo de visualización</label>
+              <select value={config.modo} onChange={(e) => handleChange('modo', e.target.value)}>
+                <option value="tabla">Tabla completa</option>
+                <option value="slider">Slider rotativo</option>
+              </select>
+            </div>
+
+            {config.modo === 'slider' && (
+              <div className="opcion">
+                <label>Tiempo de rotación del slider (segundos)</label>
+                <input 
+                  type="range" 
+                  min="2" 
+                  max="15" 
+                  step="1"
+                  value={config.tiempoSlider}
+                  onChange={(e) => handleChange('tiempoSlider', parseInt(e.target.value))}
+                />
+                <span className="valor-actual">{config.tiempoSlider}s</span>
+              </div>
+            )}
+
             <div className="opcion">
               <label>Cantidad de clanes a mostrar</label>
               <select value={config.cantidad} onChange={(e) => handleChange('cantidad', parseInt(e.target.value))}>
@@ -218,28 +263,50 @@ function ConfiguradorOBS() {
             
             <div className="opcion">
               <label>Ancho (px)</label>
-              <input 
-                type="range" 
-                min="300" 
-                max="1200" 
-                step="50"
-                value={config.ancho}
-                onChange={(e) => handleChange('ancho', parseInt(e.target.value))}
-              />
-              <span className="valor-actual">{config.ancho}px</span>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <input 
+                  type="range" 
+                  min="300" 
+                  max="1200" 
+                  step="50"
+                  value={config.ancho}
+                  onChange={(e) => handleChange('ancho', parseInt(e.target.value))}
+                  style={{ flex: 1 }}
+                />
+                <input 
+                  type="number" 
+                  min="300" 
+                  max="1200" 
+                  step="50"
+                  value={config.ancho}
+                  onChange={(e) => handleChange('ancho', parseInt(e.target.value) || 300)}
+                  style={{ width: '80px' }}
+                />
+              </div>
             </div>
 
             <div className="opcion">
               <label>Altura (px)</label>
-              <input 
-                type="range" 
-                min="200" 
-                max="800" 
-                step="50"
-                value={config.altura}
-                onChange={(e) => handleChange('altura', parseInt(e.target.value))}
-              />
-              <span className="valor-actual">{config.altura}px</span>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <input 
+                  type="range" 
+                  min="200" 
+                  max="800" 
+                  step="50"
+                  value={config.altura}
+                  onChange={(e) => handleChange('altura', parseInt(e.target.value))}
+                  style={{ flex: 1 }}
+                />
+                <input 
+                  type="number" 
+                  min="200" 
+                  max="800" 
+                  step="50"
+                  value={config.altura}
+                  onChange={(e) => handleChange('altura', parseInt(e.target.value) || 200)}
+                  style={{ width: '80px' }}
+                />
+              </div>
             </div>
           </div>
 
@@ -264,7 +331,7 @@ function ConfiguradorOBS() {
         {/* Columna derecha - Vista previa y URL */}
         <div className="configurador-resultado">
           <div className="seccion-url">
-            <h2>🔗 URL para OBS</h2>
+            <h2>🔗 URL para OBS </h2>
             <div className="url-display">
               <input 
                 type="text" 
@@ -287,8 +354,8 @@ function ConfiguradorOBS() {
               <label>Tamaño de vista previa</label>
               <input 
                 type="range" 
-                min="200" 
-                max="600" 
+                min="300" 
+                max="800" 
                 step="50"
                 value={tamanoPreview}
                 onChange={(e) => setTamanoPreview(parseInt(e.target.value))}
@@ -331,7 +398,7 @@ function ConfiguradorOBS() {
               cantidad: 3, bg: 'dark', transparente: false, medallas: true,
               numeros: true, puntos: true, victorias: true, footer: true,
               coloresClan: true, velocidad: 10, fuente: 'normal',
-              animaciones: true, borde: true, titulo: 'TOP', ancho: 600, altura: 600
+              animaciones: true, borde: true, titulo: 'TOP', ancho: 600, altura: 600, modo: 'tabla', tiempoSlider: 5
             })}>
               🎯 Clásico (Por defecto)
             </button>
@@ -339,7 +406,7 @@ function ConfiguradorOBS() {
               cantidad: 5, bg: 'gradient', transparente: false, medallas: true,
               numeros: false, puntos: true, victorias: true, footer: false,
               coloresClan: true, velocidad: 15, fuente: 'grande',
-              animaciones: true, borde: true, titulo: 'TOP', ancho: 700, altura: 500
+              animaciones: true, borde: true, titulo: 'TOP', ancho: 700, altura: 500, modo: 'tabla', tiempoSlider: 5
             })}>
               ✨ Premium
             </button>
@@ -347,15 +414,23 @@ function ConfiguradorOBS() {
               cantidad: 3, bg: 'dark', transparente: true, medallas: true,
               numeros: false, puntos: true, victorias: false, footer: false,
               coloresClan: true, velocidad: 10, fuente: 'grande',
-              animaciones: false, borde: false, titulo: 'LÍDERES', ancho: 600, altura: 350
+              animaciones: false, borde: false, titulo: 'LÍDERES', ancho: 600, altura: 350, modo: 'tabla', tiempoSlider: 5
             })}>
               👻 Minimalista Transparente
+            </button>
+            <button onClick={() => setConfig({
+              cantidad: 5, bg: 'dark', transparente: false, medallas: false,
+              numeros: false, puntos: true, victorias: false, footer: false,
+              coloresClan: true, velocidad: 10, fuente: 'grande',
+              animaciones: false, borde: false, titulo: 'TOP', ancho: 600, altura: 400, modo: 'slider', tiempoSlider: 4
+            })}>
+              🎬 Slider Rotativo
             </button>
             <button onClick={() => setConfig({
               cantidad: 12, bg: 'black', transparente: false, medallas: false,
               numeros: true, puntos: true, victorias: true, footer: true,
               coloresClan: false, velocidad: 30, fuente: 'pequeña',
-              animaciones: false, borde: false, titulo: 'TABLA COMPLETA', ancho: 800, altura: 600
+              animaciones: false, borde: false, titulo: 'TABLA COMPLETA', ancho: 800, altura: 600, modo: 'tabla', tiempoSlider: 5
             })}>
 
               📊 Tabla Completa

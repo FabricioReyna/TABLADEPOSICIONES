@@ -6,6 +6,7 @@ function Top3() {
   const [topClanes, setTopClanes] = useState([]);
   const [torneoActivo, setTorneoActivo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [indiceActual, setIndiceActual] = useState(0);
 
   // Leer configuración desde URL params
   const params = new URLSearchParams(window.location.search);
@@ -25,7 +26,9 @@ function Top3() {
     borde: params.get('borde') !== 'false',
     titulo: params.get('titulo') || 'TOP',
     ancho: parseInt(params.get('ancho') || '600'),
-    altura: parseInt(params.get('altura') || '400')
+    altura: parseInt(params.get('altura') || '400'),
+    modo: params.get('modo') || 'tabla',
+    tiempoSlider: parseInt(params.get('tiempoSlider') || '5')
   };
 
   const cargarDatos = useCallback(async () => {
@@ -63,6 +66,17 @@ function Top3() {
     return () => clearInterval(interval);
   }, [cargarDatos, config.velocidad]);
 
+  // Slider automático para modo slider
+  useEffect(() => {
+    if (config.modo === 'slider' && topClanes.length > 0) {
+      const intervaloSlider = setInterval(() => {
+        setIndiceActual((prev) => (prev + 1) % topClanes.length);
+      }, config.tiempoSlider * 1000); // Cambiar según tiempo configurado
+
+      return () => clearInterval(intervaloSlider);
+    }
+  }, [config.modo, topClanes.length, config.tiempoSlider]);
+
   const obtenerClaseEspecial = (nombreClan) => {
     const nombreLower = nombreClan.toLowerCase();
     if (nombreLower.includes('vegetta')) return 'vegetta-row';
@@ -96,6 +110,44 @@ function Top3() {
     );
   }
 
+  // Renderizado modo slider
+  if (config.modo === 'slider' && topClanes.length > 0) {
+    const clanActual = topClanes[indiceActual];
+    return (
+      <div 
+        className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''} fuente-${config.tamañoFuente} ${config.borde ? 'con-borde' : 'sin-borde'} modo-slider`}
+        style={{ width: `${config.ancho}px`, height: `${config.altura}px` }}
+      >
+        <div className="top3-header">
+          <h1>{config.titulo}</h1>
+        </div>
+
+        <div className="slider-content">
+          <div className={`slider-item ${config.coloresClan ? obtenerClaseEspecial(clanActual.clan) : ''}`}>
+            <div className="slider-posicion">
+              <span className="numero-grande">#{indiceActual + 1}</span>
+            </div>
+            <div className="slider-clan">{clanActual.clan}</div>
+            <div className="slider-puntos">
+              <span className="puntos-valor">{clanActual.puntos}</span>
+              <span className="puntos-label">PUNTOS</span>
+            </div>
+          </div>
+          
+          <div className="slider-indicadores">
+            {topClanes.map((_, index) => (
+              <span 
+                key={index} 
+                className={`indicador ${index === indiceActual ? 'activo' : ''}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Renderizado modo tabla
   return (
     <div 
       className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''} fuente-${config.tamañoFuente} ${config.animaciones ? 'con-animaciones' : ''} ${config.borde ? 'con-borde' : 'sin-borde'}`}
