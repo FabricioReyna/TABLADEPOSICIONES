@@ -23,7 +23,9 @@ function Top3() {
     tamañoFuente: params.get('fuente') || 'normal',
     animaciones: params.get('animaciones') !== 'false',
     borde: params.get('borde') !== 'false',
-    titulo: params.get('titulo') || 'TOP'
+    titulo: params.get('titulo') || 'TOP',
+    ancho: parseInt(params.get('ancho') || '600'),
+    altura: parseInt(params.get('altura') || '400')
   };
 
   const cargarDatos = useCallback(async () => {
@@ -83,7 +85,10 @@ function Top3() {
 
   if (loading) {
     return (
-      <div className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''}`}>
+      <div 
+        className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''}`}
+        style={{ width: `${config.ancho}px`, height: `${config.altura}px` }}
+      >
         <div className="top3-loading">Cargando...</div>
       </div>
     );
@@ -91,17 +96,22 @@ function Top3() {
 
   if (!torneoActivo) {
     return (
-      <div className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''}`}>
+      <div 
+        className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''}`}
+        style={{ width: `${config.ancho}px`, height: `${config.altura}px` }}
+      >
         <div className="top3-no-data">No hay torneo activo</div>
       </div>
     );
   }
 
   return (
-    <div className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''} fuente-${config.tamañoFuente} ${config.animaciones ? 'con-animaciones' : ''} ${config.borde ? 'con-borde' : 'sin-borde'}`}>
+    <div 
+      className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''} fuente-${config.tamañoFuente} ${config.animaciones ? 'con-animaciones' : ''} ${config.borde ? 'con-borde' : 'sin-borde'}`}
+      style={{ width: `${config.ancho}px`, height: `${config.altura}px` }}
+    >
       <div className="top3-header">
-        <h1>🏆 {config.titulo} {config.cantidad}</h1>
-        <h2>{torneoActivo.nombre}</h2>
+        <h1>{config.titulo}</h1>
       </div>
 
       <div className="top3-table">
@@ -111,33 +121,17 @@ function Top3() {
             className={`top3-row ${config.coloresClan ? obtenerClaseEspecial(clanData.clan) : ''}`}
           >
             <div className="top3-posicion">
-              {config.mostrarMedallas && <span className="medalla">{obtenerMedalla(index)}</span>}
-              {config.mostrarNumeros && <span className="numero">#{index + 1}</span>}
+              <span className="numero">{index + 1}</span>
             </div>
             <div className="top3-clan">{clanData.clan}</div>
             <div className="top3-stats">
-              {config.mostrarPuntos && (
-                <div className="stat">
-                  <span className="stat-valor">{clanData.puntos}</span>
-                  <span className="stat-label">PTS</span>
-                </div>
-              )}
-              {config.mostrarVictorias && (
-                <div className="stat">
-                  <span className="stat-valor">{clanData.ganados}</span>
-                  <span className="stat-label">V</span>
-                </div>
-              )}
+              <div className="stat-puntos">
+                <span className="stat-valor">{clanData.puntos}</span>
+              </div>
             </div>
           </div>
         ))}
       </div>
-
-      {config.mostrarFooter && (
-        <div className="top3-footer">
-          Actualización cada {config.velocidad}s
-        </div>
-      )}
     </div>
   );
 }

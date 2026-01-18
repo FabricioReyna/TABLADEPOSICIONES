@@ -16,8 +16,12 @@ function ConfiguradorOBS() {
     fuente: 'normal',
     animaciones: true,
     borde: true,
-    titulo: 'TOP'
+    titulo: 'TOP',
+    ancho: 600,
+    altura: 600
   });
+
+  const [tamanoPreview, setTamanoPreview] = useState(300);
 
   const [urlCopiada, setUrlCopiada] = useState(false);
 
@@ -45,6 +49,8 @@ function ConfiguradorOBS() {
     if (!config.animaciones) params.append('animaciones', 'false');
     if (!config.borde) params.append('borde', 'false');
     if (config.titulo !== 'TOP') params.append('titulo', config.titulo);
+    if (config.ancho !== 600) params.append('ancho', config.ancho);
+    if (config.altura !== 600) params.append('altura', config.altura);
 
     const queryString = params.toString();
     return queryString ? `${baseURL}?${queryString}` : baseURL;
@@ -208,6 +214,36 @@ function ConfiguradorOBS() {
           </div>
 
           <div className="seccion">
+            <h2>📐 Dimensiones</h2>
+            
+            <div className="opcion">
+              <label>Ancho (px)</label>
+              <input 
+                type="range" 
+                min="300" 
+                max="1200" 
+                step="50"
+                value={config.ancho}
+                onChange={(e) => handleChange('ancho', parseInt(e.target.value))}
+              />
+              <span className="valor-actual">{config.ancho}px</span>
+            </div>
+
+            <div className="opcion">
+              <label>Altura (px)</label>
+              <input 
+                type="range" 
+                min="200" 
+                max="800" 
+                step="50"
+                value={config.altura}
+                onChange={(e) => handleChange('altura', parseInt(e.target.value))}
+              />
+              <span className="valor-actual">{config.altura}px</span>
+            </div>
+          </div>
+
+          <div className="seccion">
             <h2>⏱️ Actualización</h2>
             
             <div className="opcion">
@@ -246,15 +282,35 @@ function ConfiguradorOBS() {
           </div>
 
           <div className="seccion-preview">
-            <h2>👁️ Vista Previa</h2>
-            <p className="preview-info">Abre en nueva ventana para ver el resultado:</p>
+            <h2>👁️ Vista Previa en Vivo</h2>
+            <div className="control-tamano-preview">
+              <label>Tamaño de vista previa</label>
+              <input 
+                type="range" 
+                min="200" 
+                max="600" 
+                step="50"
+                value={tamanoPreview}
+                onChange={(e) => setTamanoPreview(parseInt(e.target.value))}
+              />
+              <span className="valor-actual">{tamanoPreview}px</span>
+            </div>
+            <div className="preview-frame" style={{ height: tamanoPreview }}>
+              <iframe 
+                src={generarURL()} 
+                title="Vista Previa OBS"
+                width="100%"
+                height={tamanoPreview}
+                frameBorder="0"
+              />
+            </div>
             <a 
               href={generarURL()} 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn-preview-grande"
             >
-              🔗 Abrir Vista Previa
+              🔗 Abrir en Nueva Ventana
             </a>
           </div>
 
@@ -275,7 +331,7 @@ function ConfiguradorOBS() {
               cantidad: 3, bg: 'dark', transparente: false, medallas: true,
               numeros: true, puntos: true, victorias: true, footer: true,
               coloresClan: true, velocidad: 10, fuente: 'normal',
-              animaciones: true, borde: true, titulo: 'TOP'
+              animaciones: true, borde: true, titulo: 'TOP', ancho: 600, altura: 600
             })}>
               🎯 Clásico (Por defecto)
             </button>
@@ -283,7 +339,7 @@ function ConfiguradorOBS() {
               cantidad: 5, bg: 'gradient', transparente: false, medallas: true,
               numeros: false, puntos: true, victorias: true, footer: false,
               coloresClan: true, velocidad: 15, fuente: 'grande',
-              animaciones: true, borde: true, titulo: 'TOP'
+              animaciones: true, borde: true, titulo: 'TOP', ancho: 700, altura: 500
             })}>
               ✨ Premium
             </button>
@@ -291,7 +347,7 @@ function ConfiguradorOBS() {
               cantidad: 3, bg: 'dark', transparente: true, medallas: true,
               numeros: false, puntos: true, victorias: false, footer: false,
               coloresClan: true, velocidad: 10, fuente: 'grande',
-              animaciones: false, borde: false, titulo: 'LÍDERES'
+              animaciones: false, borde: false, titulo: 'LÍDERES', ancho: 600, altura: 350
             })}>
               👻 Minimalista Transparente
             </button>
@@ -299,8 +355,9 @@ function ConfiguradorOBS() {
               cantidad: 12, bg: 'black', transparente: false, medallas: false,
               numeros: true, puntos: true, victorias: true, footer: true,
               coloresClan: false, velocidad: 30, fuente: 'pequeña',
-              animaciones: false, borde: false, titulo: 'TABLA COMPLETA'
+              animaciones: false, borde: false, titulo: 'TABLA COMPLETA', ancho: 800, altura: 600
             })}>
+
               📊 Tabla Completa
             </button>
           </div>
