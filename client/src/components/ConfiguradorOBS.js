@@ -334,7 +334,7 @@ function ConfiguradorOBS() {
             <h2>🔗 URL para OBS </h2>
             <div className="url-display">
               <input 
-                type="text" 
+                type="password" 
                 readOnly 
                 value={generarURL()}
                 onClick={(e) => e.target.select()}
