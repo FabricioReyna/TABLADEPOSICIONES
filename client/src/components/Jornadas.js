@@ -144,27 +144,109 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
     const todasLasJornadas = [...jornadasTemp];
     const clanes = [...new Set(todasLasJornadas.flatMap(j => [...j.dia1.equipos, ...j.dia2.equipos]))];
     
-    const nuevasJornadas = todasLasJornadas.map(jornada => {
-      const clanesDisponibles = [...clanes];
-      const shuffled = clanesDisponibles.sort(() => Math.random() - 0.5);
+    // Registrar todos los enfrentamientos existentes
+    const enfrentamientosExistentes = new Set();
+    todasLasJornadas.forEach(jornada => {
+      // Revisar día 1
+      for (let i = 0; i < jornada.dia1.equipos.length; i += 2) {
+        const eq1 = jornada.dia1.equipos[i];
+        const eq2 = jornada.dia1.equipos[i + 1];
+        if (eq1 && eq2) {
+          // Guardar en ambos órdenes para facilitar búsqueda
+          enfrentamientosExistentes.add(`${eq1}-${eq2}`);
+          enfrentamientosExistentes.add(`${eq2}-${eq1}`);
+        }
+      }
+      // Revisar día 2
+      for (let i = 0; i < jornada.dia2.equipos.length; i += 2) {
+        const eq1 = jornada.dia2.equipos[i];
+        const eq2 = jornada.dia2.equipos[i + 1];
+        if (eq1 && eq2) {
+          enfrentamientosExistentes.add(`${eq1}-${eq2}`);
+          enfrentamientosExistentes.add(`${eq2}-${eq1}`);
+        }
+      }
+    });
+
+    // Función para verificar si un enfrentamiento ya existe
+    const yaSeEnfrentaron = (eq1, eq2) => {
+      return enfrentamientosExistentes.has(`${eq1}-${eq2}`);
+    };
+
+    // Función para generar emparejamientos válidos para una jornada
+    const generarEmparejamientos = (clanesDisponibles, enfrentamientosPrevios) => {
+      const maxIntentos = 1000;
+      let intento = 0;
       
+      while (intento < maxIntentos) {
+        const shuffled = [...clanesDisponibles].sort(() => Math.random() - 0.5);
+        let esValido = true;
+        
+        // Verificar todos los emparejamientos de esta configuración
+        for (let i = 0; i < shuffled.length; i += 2) {
+          const eq1 = shuffled[i];
+          const eq2 = shuffled[i + 1];
+          if (yaSeEnfrentaron(eq1, eq2)) {
+            esValido = false;
+            break;
+          }
+        }
+        
+        if (esValido) {
+          // Marcar estos nuevos enfrentamientos
+          for (let i = 0; i < shuffled.length; i += 2) {
+            const eq1 = shuffled[i];
+            const eq2 = shuffled[i + 1];
+            enfrentamientosExistentes.add(`${eq1}-${eq2}`);
+            enfrentamientosExistentes.add(`${eq2}-${eq1}`);
+          }
+          return shuffled;
+        }
+        
+        intento++;
+      }
+      
+      return null; // No se pudo encontrar una configuración válida
+    };
+
+    const nuevasJornadas = todasLasJornadas.map(jornada => {
+      // Intentar generar día 1
+      const equiposDia1 = generarEmparejamientos(clanes, enfrentamientosExistentes);
+      if (!equiposDia1) {
+        setToast({ 
+          mensaje: '⚠️ No se pueden generar más encuentros únicos. Todos los equipos ya se han enfrentado.', 
+          tipo: 'error' 
+        });
+        return jornada; // Mantener la jornada sin cambios
+      }
+
+      // Intentar generar día 2
+      const equiposDia2 = generarEmparejamientos(clanes, enfrentamientosExistentes);
+      if (!equiposDia2) {
+        setToast({ 
+          mensaje: '⚠️ No se pueden generar más encuentros únicos. Todos los equipos ya se han enfrentado.', 
+          tipo: 'error' 
+        });
+        return jornada; // Mantener la jornada sin cambios
+      }
+
       return {
         ...jornada,
         dia1: {
           ...jornada.dia1,
-          equipos: shuffled.slice(0, 6),
+          equipos: equiposDia1.slice(0, 6),
           resultados: [] // Limpiar resultados al randomizar
         },
         dia2: {
           ...jornada.dia2,
-          equipos: shuffled.slice(6, 12),
+          equipos: equiposDia2.slice(0, 6),
           resultados: []
         }
       };
     });
     
     setJornadasTemp(nuevasJornadas);
-    setToast({ mensaje: 'Encuentros randomizados', tipo: 'success' });
+    setToast({ mensaje: '✅ Encuentros randomizados sin repetir enfrentamientos', tipo: 'success' });
   };
 
   const guardarJornadas = async () => {
