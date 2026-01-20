@@ -144,8 +144,10 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
     const todasLasJornadas = [...jornadasTemp];
     const clanes = [...new Set(todasLasJornadas.flatMap(j => [...j.dia1.equipos, ...j.dia2.equipos]))];
     
-    // Registrar todos los enfrentamientos existentes
+    // Registrar TODOS los enfrentamientos existentes desde la jornada 1
     const enfrentamientosExistentes = new Set();
+    
+    // Primero: Registrar todos los enfrentamientos que ya existen en TODAS las jornadas
     todasLasJornadas.forEach(jornada => {
       // Revisar día 1
       for (let i = 0; i < jornada.dia1.equipos.length; i += 2) {
@@ -168,37 +170,41 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       }
     });
 
+    console.log(`📋 Enfrentamientos existentes registrados: ${enfrentamientosExistentes.size / 2}`);
+
     // Función para verificar si un enfrentamiento ya existe
     const yaSeEnfrentaron = (eq1, eq2) => {
       return enfrentamientosExistentes.has(`${eq1}-${eq2}`);
     };
 
-    // Función para generar emparejamientos válidos para una jornada
-    const generarEmparejamientos = (clanesDisponibles, enfrentamientosPrevios) => {
-      const maxIntentos = 1000;
+    // Función para generar emparejamientos válidos sin repeticiones
+    const generarEmparejamientos = (clanesDisponibles) => {
+      const maxIntentos = 5000; // Aumentar intentos para mejor búsqueda
       let intento = 0;
       
       while (intento < maxIntentos) {
         const shuffled = [...clanesDisponibles].sort(() => Math.random() - 0.5);
         let esValido = true;
         
-        // Verificar todos los emparejamientos de esta configuración
+        // Verificar que NINGÚN emparejamiento de esta configuración ya exista
         for (let i = 0; i < shuffled.length; i += 2) {
           const eq1 = shuffled[i];
           const eq2 = shuffled[i + 1];
-          if (yaSeEnfrentaron(eq1, eq2)) {
+          if (eq1 && eq2 && yaSeEnfrentaron(eq1, eq2)) {
             esValido = false;
             break;
           }
         }
         
         if (esValido) {
-          // Marcar estos nuevos enfrentamientos
+          // Marcar estos nuevos enfrentamientos como usados
           for (let i = 0; i < shuffled.length; i += 2) {
             const eq1 = shuffled[i];
             const eq2 = shuffled[i + 1];
-            enfrentamientosExistentes.add(`${eq1}-${eq2}`);
-            enfrentamientosExistentes.add(`${eq2}-${eq1}`);
+            if (eq1 && eq2) {
+              enfrentamientosExistentes.add(`${eq1}-${eq2}`);
+              enfrentamientosExistentes.add(`${eq2}-${eq1}`);
+            }
           }
           return shuffled;
         }
@@ -206,29 +212,44 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
         intento++;
       }
       
-      return null; // No se pudo encontrar una configuración válida
+      return null; // No se pudo encontrar una configuración válida después de muchos intentos
     };
 
-    const nuevasJornadas = todasLasJornadas.map(jornada => {
+    // Randomizar TODAS las jornadas con la garantía de no repetir
+    const nuevasJornadas = todasLasJornadas.map((jornada, index) => {
+      // Verificar si la jornada tiene resultados (si los tiene, no randomizar)
+      const tieneResultados = (jornada.dia1.resultados?.length > 0) || (jornada.dia2.resultados?.length > 0);
+      
+      if (tieneResultados) {
+        console.log(`⏭️ Jornada ${jornada.numero} - Mantener (tiene resultados)`);
+        return jornada; // No randomizar jornadas con resultados
+      }
+
+      console.log(`🎲 Generando Jornada ${jornada.numero}...`);
+
       // Intentar generar día 1
-      const equiposDia1 = generarEmparejamientos(clanes, enfrentamientosExistentes);
+      const equiposDia1 = generarEmparejamientos(clanes);
       if (!equiposDia1) {
+        console.error(`❌ No se pudo generar día 1 para Jornada ${jornada.numero}`);
         setToast({ 
-          mensaje: '⚠️ No se pueden generar más encuentros únicos. Todos los equipos ya se han enfrentado.', 
+          mensaje: `⚠️ No se pudieron generar más encuentros únicos en Jornada ${jornada.numero}. Se alcanzó el límite de combinaciones posibles.`, 
           tipo: 'error' 
         });
         return jornada; // Mantener la jornada sin cambios
       }
 
       // Intentar generar día 2
-      const equiposDia2 = generarEmparejamientos(clanes, enfrentamientosExistentes);
+      const equiposDia2 = generarEmparejamientos(clanes);
       if (!equiposDia2) {
+        console.error(`❌ No se pudo generar día 2 para Jornada ${jornada.numero}`);
         setToast({ 
-          mensaje: '⚠️ No se pueden generar más encuentros únicos. Todos los equipos ya se han enfrentado.', 
+          mensaje: `⚠️ No se pudieron generar más encuentros únicos en Jornada ${jornada.numero}. Se alcanzó el límite de combinaciones posibles.`, 
           tipo: 'error' 
         });
         return jornada; // Mantener la jornada sin cambios
       }
+
+      console.log(`✅ Jornada ${jornada.numero} generada correctamente`);
 
       return {
         ...jornada,
@@ -246,7 +267,10 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
     });
     
     setJornadasTemp(nuevasJornadas);
-    setToast({ mensaje: '✅ Encuentros randomizados sin repetir enfrentamientos', tipo: 'success' });
+    setToast({ 
+      mensaje: '✅ Encuentros randomizados sin repetir ningún enfrentamiento desde la Jornada 1', 
+      tipo: 'success' 
+    });
   };
 
   const guardarJornadas = async () => {
