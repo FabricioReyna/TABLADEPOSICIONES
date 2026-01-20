@@ -380,6 +380,22 @@
   transform: scale(0.98);
 }
 
+.clan-vs.draggable {
+  cursor: grab;
+  transition: all 0.3s ease;
+}
+
+.clan-vs.draggable:active {
+  cursor: grabbing;
+  opacity: 0.7;
+  transform: scale(1.05) rotate(2deg);
+}
+
+.clan-vs.draggable[draggable="true"]:hover {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
 .clan-vs.ganador {
   background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   border-color: #66bb6a;

@@ -11,6 +11,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   const [toast, setToast] = useState(null);
   const [modalReiniciar, setModalReiniciar] = useState(false);
   const [jornadaSeleccionada, setJornadaSeleccionada] = useState('todas'); // 'todas' o número de jornada
+  const [draggedItem, setDraggedItem] = useState(null); // { jornadaNumero, dia, indice }
 
   // Actualizar jornadasTemp cuando cambien las jornadas desde props
   useEffect(() => {
@@ -192,6 +193,98 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       setGuardando(false);
     }
   };
+
+  // Funciones para drag and drop manual
+  const handleDragStart = (e, jornadaNumero, dia, indice) => {
+    if (!puedeEditar) return;
+    setDraggedItem({ jornadaNumero, dia, indice });
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, targetJornada, targetDia, targetIndice) => {
+    e.preventDefault();
+    if (!puedeEditar || !draggedItem) return;
+
+    const { jornadaNumero: sourceJornada, dia: sourceDia, indice: sourceIndice } = draggedItem;
+    
+    // No hacer nada si es la misma posición
+    if (sourceJornada === targetJornada && sourceDia === targetDia && sourceIndice === targetIndice) {
+      setDraggedItem(null);
+      return;
+    }
+
+    intercambiarEquipos(sourceJornada, sourceDia, sourceIndice, targetJornada, targetDia, targetIndice);
+    setDraggedItem(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+  };
+
+  // Intercambiar equipos y propagar cambios a jornadas siguientes
+  const intercambiarEquipos = (jornadaOrigen, diaOrigen, indiceOrigen, jornadaDestino, diaDestino, indiceDestino) => {
+    const nuevasJornadas = [...jornadasTemp];
+    
+    const jornadaOrigenObj = nuevasJornadas.find(j => j.numero === jornadaOrigen);
+    const jornadaDestinoObj = nuevasJornadas.find(j => j.numero === jornadaDestino);
+    
+    const diaOrigenKey = diaOrigen === 1 ? 'dia1' : 'dia2';
+    const diaDestinoKey = diaDestino === 1 ? 'dia1' : 'dia2';
+    
+    // Intercambiar equipos
+    const equipoOrigen = jornadaOrigenObj[diaOrigenKey].equipos[indiceOrigen];
+    const equipoDestino = jornadaDestinoObj[diaDestinoKey].equipos[indiceDestino];
+    
+    jornadaOrigenObj[diaOrigenKey].equipos[indiceOrigen] = equipoDestino;
+    jornadaDestinoObj[diaDestinoKey].equipos[indiceDestino] = equipoOrigen;
+    
+    // Si movemos en la misma jornada, ya terminamos
+    if (jornadaOrigen === jornadaDestino) {
+      setJornadasTemp(nuevasJornadas);
+      setToast({ mensaje: '🔄 Equipos intercambiados', tipo: 'success' });
+      return;
+    }
+    
+    // Propagar cambios a todas las jornadas siguientes
+    const jornadaMayor = Math.max(jornadaOrigen, jornadaDestino);
+    
+    // Para cada jornada posterior a la modificada
+    for (let i = jornadaMayor + 1; i <= nuevasJornadas.length; i++) {
+      const jornadaPosterior = nuevasJornadas.find(j => j.numero === i);
+      if (!jornadaPosterior) continue;
+      
+      // Actualizar todas las apariciones del equipo origen
+      ['dia1', 'dia2'].forEach(diaKey => {
+        jornadaPosterior[diaKey].equipos = jornadaPosterior[diaKey].equipos.map(equipo => {
+          if (equipo === equipoOrigen) return equipoDestino;
+          if (equipo === equipoDestino) return equipoOrigen;
+          return equipo;
+        });
+        
+        // También actualizar resultados si existen
+        if (jornadaPosterior[diaKey].resultados) {
+          jornadaPosterior[diaKey].resultados = jornadaPosterior[diaKey].resultados.map(resultado => ({
+            ...resultado,
+            ganador: resultado.ganador === equipoOrigen ? equipoDestino : 
+                     resultado.ganador === equipoDestino ? equipoOrigen : resultado.ganador,
+            perdedor: resultado.perdedor === equipoOrigen ? equipoDestino : 
+                      resultado.perdedor === equipoDestino ? equipoOrigen : resultado.perdedor
+          }));
+        }
+      });
+    }
+    
+    setJornadasTemp(nuevasJornadas);
+    setToast({ 
+      mensaje: `🔄 Equipos intercambiados y actualizados en ${nuevasJornadas.length - jornadaMayor} jornadas siguientes`, 
+      tipo: 'success' 
+    });
+  };
   // Organizar Playoff (Jornada 7)
   const organizarPlayoff = async () => {
     setGuardando(true);
@@ -301,18 +394,30 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
                                     <span className="partido-numero">Partido {indicePartido + 1}</span>
                                     <div className="versus-box">
                                       <span 
-                                        className={`clan-vs ${ganador === equipo1 ? 'ganador' : ''} ${ganador && ganador !== equipo1 ? 'perdedor' : ''} ${puedeEditar ? 'editable' : ''}`}
+                                        className={`clan-vs ${ganador === equipo1 ? 'ganador' : ''} ${ganador && ganador !== equipo1 ? 'perdedor' : ''} ${puedeEditar ? 'editable draggable' : ''}`}
                                         onDoubleClick={() => marcarGanador(jornada.numero, 1, indicePartido, equipo1)}
+                                        draggable={puedeEditar}
+                                        onDragStart={(e) => handleDragStart(e, jornada.numero, 1, indicePartido * 2)}
+                                        onDragOver={handleDragOver}
+                                        onDrop={(e) => handleDrop(e, jornada.numero, 1, indicePartido * 2)}
+                                        onDragEnd={handleDragEnd}
+                                        title={puedeEditar ? '🎯 Arrastra para intercambiar posición' : ''}
                                       >
-                                        {equipo1}
+                                        {puedeEditar && '⋮⋮ '}{equipo1}
                                         {ganador === equipo1 && ' 🏆'}
                                       </span>
                                       <span className="vs-text">VS</span>
                                       <span 
-                                        className={`clan-vs ${ganador === equipo2 ? 'ganador' : ''} ${ganador && ganador !== equipo2 ? 'perdedor' : ''} ${puedeEditar ? 'editable' : ''}`}
+                                        className={`clan-vs ${ganador === equipo2 ? 'ganador' : ''} ${ganador && ganador !== equipo2 ? 'perdedor' : ''} ${puedeEditar ? 'editable draggable' : ''}`}
                                         onDoubleClick={() => marcarGanador(jornada.numero, 1, indicePartido, equipo2)}
+                                        draggable={puedeEditar}
+                                        onDragStart={(e) => handleDragStart(e, jornada.numero, 1, indicePartido * 2 + 1)}
+                                        onDragOver={handleDragOver}
+                                        onDrop={(e) => handleDrop(e, jornada.numero, 1, indicePartido * 2 + 1)}
+                                        onDragEnd={handleDragEnd}
+                                        title={puedeEditar ? '🎯 Arrastra para intercambiar posición' : ''}
                                       >
-                                        {equipo2}
+                                        {puedeEditar && '⋮⋮ '}{equipo2}
                                         {ganador === equipo2 && ' 🏆'}
                                       </span>
                                     </div>
@@ -342,18 +447,30 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
                                     <span className="partido-numero">Partido {indicePartido + 1}</span>
                                     <div className="versus-box">
                                       <span 
-                                        className={`clan-vs ${ganador === equipo1 ? 'ganador' : ''} ${ganador && ganador !== equipo1 ? 'perdedor' : ''} ${puedeEditar ? 'editable' : ''}`}
+                                        className={`clan-vs ${ganador === equipo1 ? 'ganador' : ''} ${ganador && ganador !== equipo1 ? 'perdedor' : ''} ${puedeEditar ? 'editable draggable' : ''}`}
                                         onDoubleClick={() => marcarGanador(jornada.numero, 2, indicePartido, equipo1)}
+                                        draggable={puedeEditar}
+                                        onDragStart={(e) => handleDragStart(e, jornada.numero, 2, indicePartido * 2)}
+                                        onDragOver={handleDragOver}
+                                        onDrop={(e) => handleDrop(e, jornada.numero, 2, indicePartido * 2)}
+                                        onDragEnd={handleDragEnd}
+                                        title={puedeEditar ? '🎯 Arrastra para intercambiar posición' : ''}
                                       >
-                                        {equipo1}
+                                        {puedeEditar && '⋮⋮ '}{equipo1}
                                         {ganador === equipo1 && ' 🏆'}
                                       </span>
                                       <span className="vs-text">VS</span>
                                       <span 
-                                        className={`clan-vs ${ganador === equipo2 ? 'ganador' : ''} ${ganador && ganador !== equipo2 ? 'perdedor' : ''} ${puedeEditar ? 'editable' : ''}`}
+                                        className={`clan-vs ${ganador === equipo2 ? 'ganador' : ''} ${ganador && ganador !== equipo2 ? 'perdedor' : ''} ${puedeEditar ? 'editable draggable' : ''}`}
                                         onDoubleClick={() => marcarGanador(jornada.numero, 2, indicePartido, equipo2)}
+                                        draggable={puedeEditar}
+                                        onDragStart={(e) => handleDragStart(e, jornada.numero, 2, indicePartido * 2 + 1)}
+                                        onDragOver={handleDragOver}
+                                        onDrop={(e) => handleDrop(e, jornada.numero, 2, indicePartido * 2 + 1)}
+                                        onDragEnd={handleDragEnd}
+                                        title={puedeEditar ? '🎯 Arrastra para intercambiar posición' : ''}
                                       >
-                                        {equipo2}
+                                        {puedeEditar && '⋮⋮ '}{equipo2}
                                         {ganador === equipo2 && ' 🏆'}
                                       </span>
                                     </div>
@@ -400,7 +517,12 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
 
       <div className="jornadas-info">
         <p>🎮 Cada jornada dura 2 días • Cada día: 3 partidos (6 clanes, 1 vs 1)</p>
-        {puedeEditar && <p className="instruccion">💡 Doble click en un clan para marcarlo como ganador</p>}
+        {puedeEditar && (
+          <>
+            <p className="instruccion">💡 Doble click en un clan para marcarlo como ganador</p>
+            <p className="instruccion">🎯 Arrastra y suelta equipos para reorganizar manualmente (se actualiza en jornadas siguientes)</p>
+          </>
+        )}
       </div>
 
       {puedeEditar && (
