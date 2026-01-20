@@ -5,7 +5,7 @@ import ModalConfirmacion from './ModalConfirmacion';
 import './Jornadas.css';
 
 function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
-  const [jornadaExpandida, setJornadaExpandida] = useState(null);
+  const [jornadasExpandidas, setJornadasExpandidas] = useState([]);
   const [jornadasTemp, setJornadasTemp] = useState(jornadas);
   const [guardando, setGuardando] = useState(false);
   const [toast, setToast] = useState(null);
@@ -19,7 +19,11 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   }, [jornadas]);
 
   const toggleJornada = (numero) => {
-    setJornadaExpandida(jornadaExpandida === numero ? null : numero);
+    setJornadasExpandidas(prev => 
+      prev.includes(numero) 
+        ? prev.filter(n => n !== numero)
+        : [...prev, numero]
+    );
   };
 
   // Marcar ganador al hacer doble click
@@ -368,13 +372,13 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
                           ✅ Finalizar
                         </button>
                       )}
-                      <span className={`expand-icon ${jornadaExpandida === jornada.numero ? 'expanded' : ''}`}>
+                      <span className={`expand-icon ${jornadasExpandidas.includes(jornada.numero) ? 'expanded' : ''}`}>
                         ▼
                       </span>
                     </div>
                   </div>
 
-                  {jornadaExpandida === jornada.numero && (
+                  {jornadasExpandidas.includes(jornada.numero) && (
                     <div className="jornada-content">
                       {/* DÍA 1 */}
                       <div className="dia-section">
