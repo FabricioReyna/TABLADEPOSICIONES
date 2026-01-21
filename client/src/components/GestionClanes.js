@@ -32,7 +32,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
     
     setGuardando(true);
     try {
-      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}/puntos`, {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}/estadisticas`, {
         puntos: nuevosPuntos
       });
       setToast({ mensaje: `Puntos ${cambio > 0 ? 'incrementados' : 'decrementados'} exitosamente`, tipo: 'success' });
@@ -56,7 +56,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${editandoPuntos}/puntos`, {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${editandoPuntos}/estadisticas`, {
         puntos: puntosNum
       });
       setToast({ mensaje: 'Puntos actualizados exitosamente', tipo: 'success' });

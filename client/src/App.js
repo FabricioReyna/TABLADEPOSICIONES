@@ -116,7 +116,10 @@ function AppContent() {
           <>
             {vistaActiva === 'tabla' && (
               <TablaPosiciones 
-                tablaPosiciones={torneo.tablaPosiciones} 
+                tablaPosiciones={torneo.tablaPosiciones}
+                torneoId={torneo._id}
+                puedeEditar={estaAutenticado && esAdmin()}
+                onUpdate={handleUpdateTorneo}
               />
             )}
             

@@ -54,6 +54,16 @@
 
 .tabla-posiciones tbody tr {
   border-bottom: 1px solid #333;
+  transition: all 0.2s ease;
+}
+
+.tabla-posiciones tbody tr:hover {
+  background: rgba(60, 60, 60, 0.2);
+}
+
+.tabla-posiciones tbody tr[style*="cursor: pointer"]:hover {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4caf50;
 }
 
 .tabla-posiciones tbody tr.top-three {
@@ -176,6 +186,89 @@
   color: #fff;
 }
 
+/* Estilos para edición de tabla */
+.editing-row {
+  background: linear-gradient(90deg, rgba(76, 175, 80, 0.2) 0%, rgba(26, 26, 26, 0) 100%) !important;
+  border: 2px solid #4caf50 !important;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+}
+
+.acciones-cell {
+  background: rgba(76, 175, 80, 0.1) !important;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 12px !important;
+}
+
+.edit-input {
+  width: 60px;
+  padding: 8px;
+  background: rgba(45, 45, 45, 0.95);
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.edit-input:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.edit-input.ganados {
+  border-color: #4caf50;
+}
+
+.edit-input.perdidos {
+  border-color: #f44336;
+}
+
+.edit-input.puntos {
+  border-color: #ff9800;
+  width: 70px;
+}
+
+.btn-guardar-tabla,
+.btn-cancelar-tabla {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 700;
+}
+
+.btn-guardar-tabla {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-guardar-tabla:hover:not(:disabled) {
+  background: #45a049;
+  transform: scale(1.1);
+}
+
+.btn-cancelar-tabla {
+  background: #f44336;
+  color: white;
+}
+
+.btn-cancelar-tabla:hover:not(:disabled) {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+.btn-guardar-tabla:disabled,
+.btn-cancelar-tabla:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .tabla-posiciones-container {
     padding: 20px;
@@ -193,5 +286,17 @@
 
   .tabla-leyenda {
     gap: 15px;
+  }
+
+  .edit-input {
+    width: 50px;
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .btn-guardar-tabla,
+  .btn-cancelar-tabla {
+    padding: 6px 10px;
+    font-size: 0.9rem;
   }
 }

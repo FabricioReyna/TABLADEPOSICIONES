@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import Toast from './Toast';
 import './TablaPosiciones.css';
 
-function TablaPosiciones({ tablaPosiciones }) {
+function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
+  const [editando, setEditando] = useState(null);
+  const [valores, setValores] = useState({});
+  const [guardando, setGuardando] = useState(false);
+  const [toast, setToast] = useState(null);
+
   if (!tablaPosiciones || tablaPosiciones.length === 0) {
     return (
       <div className="tabla-posiciones-container">
@@ -16,6 +23,42 @@ function TablaPosiciones({ tablaPosiciones }) {
     if (b.puntos !== a.puntos) return b.puntos - a.puntos;
     return b.ganados - a.ganados;
   });
+
+  const handleEditar = (equipo) => {
+    setEditando(equipo.clan);
+    setValores({
+      puntos: equipo.puntos,
+      partidos: equipo.partidos,
+      ganados: equipo.ganados,
+      perdidos: equipo.perdidos
+    });
+  };
+
+  const handleCancelar = () => {
+    setEditando(null);
+    setValores({});
+  };
+
+  const handleGuardar = async (nombreClan) => {
+    setGuardando(true);
+    try {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}/estadisticas`, valores);
+      setToast({ mensaje: 'Estadísticas actualizadas exitosamente', tipo: 'success' });
+      setEditando(null);
+      setValores({});
+      if (onUpdate) onUpdate();
+    } catch (error) {
+      console.error('Error al actualizar estadísticas:', error);
+      setToast({ mensaje: 'Error al actualizar las estadísticas', tipo: 'error' });
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  const handleChange = (campo, valor) => {
+    const valorNum = parseInt(valor) || 0;
+    setValores(prev => ({ ...prev, [campo]: Math.max(0, valorNum) }));
+  };
 
   return (
     <div className="tabla-posiciones-container">
@@ -50,10 +93,15 @@ function TablaPosiciones({ tablaPosiciones }) {
               else if (isRoier) specialClass = 'roier-row';
               else if (isFocus) specialClass = 'focus-row';
               
+              const estaEditando = editando === equipo.clan;
+
               return (
                 <tr 
                   key={equipo.clan || index} 
-                  className={`${index < 3 ? 'top-three' : ''} ${specialClass}`}
+                  className={`${index < 3 ? 'top-three' : ''} ${specialClass} ${estaEditando ? 'editing-row' : ''}`}
+                  onDoubleClick={() => puedeEditar && !estaEditando && handleEditar(equipo)}
+                  style={{ cursor: puedeEditar && !estaEditando ? 'pointer' : 'default' }}
+                  title={puedeEditar && !estaEditando ? 'Doble clic para editar' : ''}
                 >
                   <td className="posicion">
                     {index === 0 && '🥇'}
@@ -62,10 +110,75 @@ function TablaPosiciones({ tablaPosiciones }) {
                     {index > 2 && index + 1}
                   </td>
                   <td className="clan-name">{equipo.clan}</td>
-                  <td>{equipo.partidos || 0}</td>
-                  <td className="ganados">{equipo.ganados || 0}</td>
-                  <td className="perdidos">{equipo.perdidos || 0}</td>
-                  <td className="puntos">{equipo.puntos || 0}</td>
+                  
+                  {estaEditando ? (
+                    <>
+                      <td>
+                        <input
+                          type="number"
+                          className="edit-input"
+                          value={valores.partidos}
+                          onChange={(e) => handleChange('partidos', e.target.value)}
+                          min="0"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="edit-input ganados"
+                          value={valores.ganados}
+                          onChange={(e) => handleChange('ganados', e.target.value)}
+                          min="0"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="edit-input perdidos"
+                          value={valores.perdidos}
+                          onChange={(e) => handleChange('perdidos', e.target.value)}
+                          min="0"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="edit-input puntos"
+                          value={valores.puntos}
+                          onChange={(e) => handleChange('puntos', e.target.value)}
+                          min="0"
+                        />
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{equipo.partidos || 0}</td>
+                      <td className="ganados">{equipo.ganados || 0}</td>
+                      <td className="perdidos">{equipo.perdidos || 0}</td>
+                      <td className="puntos">{equipo.puntos || 0}</td>
+                    </>
+                  )}
+
+                  {estaEditando && (
+                    <td className="acciones-cell" colSpan={puedeEditar ? 1 : 0}>
+                      <button 
+                        className="btn-guardar-tabla"
+                        onClick={() => handleGuardar(equipo.clan)}
+                        disabled={guardando}
+                        title="Guardar cambios"
+                      >
+                        ✅
+                      </button>
+                      <button 
+                        className="btn-cancelar-tabla"
+                        onClick={handleCancelar}
+                        disabled={guardando}
+                        title="Cancelar edición"
+                      >
+                        ❌
+                      </button>
+                    </td>
+                  )}
                 </tr>
               );
             })}
@@ -78,6 +191,13 @@ function TablaPosiciones({ tablaPosiciones }) {
         <span><strong>PP:</strong> Partidos Perdidos</span>
         <span><strong>Pts:</strong> Puntos</span>
       </div>
+      {toast && (
+        <Toast 
+          mensaje={toast.mensaje}
+          tipo={toast.tipo}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

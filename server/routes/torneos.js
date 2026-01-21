@@ -402,11 +402,11 @@ router.delete('/:id/clanes/:nombreClan', async (req, res) => {
   }
 });
 
-// Actualizar puntos manualmente de un clan
-router.put('/:id/clanes/:nombreClan/puntos', async (req, res) => {
+// Actualizar estadísticas manualmente de un clan
+router.put('/:id/clanes/:nombreClan/estadisticas', async (req, res) => {
   try {
     const { nombreClan } = req.params;
-    const { puntos } = req.body;
+    const { puntos, partidos, ganados, perdidos } = req.body;
     const torneo = await Torneo.findById(req.params.id);
     
     if (!torneo) {
@@ -419,22 +419,46 @@ router.put('/:id/clanes/:nombreClan/puntos', async (req, res) => {
       return res.status(404).json({ mensaje: 'Clan no encontrado' });
     }
 
-    // Validar que puntos sea un número válido
-    const puntosNuevos = parseInt(puntos);
-    if (isNaN(puntosNuevos) || puntosNuevos < 0) {
-      return res.status(400).json({ mensaje: 'Los puntos deben ser un número positivo' });
+    // Actualizar campos proporcionados con validación
+    if (puntos !== undefined) {
+      const puntosNuevos = parseInt(puntos);
+      if (isNaN(puntosNuevos) || puntosNuevos < 0) {
+        return res.status(400).json({ mensaje: 'Los puntos deben ser un número positivo' });
+      }
+      clan.puntos = puntosNuevos;
     }
 
-    // Actualizar puntos
-    clan.puntos = puntosNuevos;
+    if (partidos !== undefined) {
+      const partidosNuevos = parseInt(partidos);
+      if (isNaN(partidosNuevos) || partidosNuevos < 0) {
+        return res.status(400).json({ mensaje: 'Los partidos deben ser un número positivo' });
+      }
+      clan.partidos = partidosNuevos;
+    }
+
+    if (ganados !== undefined) {
+      const ganadosNuevos = parseInt(ganados);
+      if (isNaN(ganadosNuevos) || ganadosNuevos < 0) {
+        return res.status(400).json({ mensaje: 'Los ganados deben ser un número positivo' });
+      }
+      clan.ganados = ganadosNuevos;
+    }
+
+    if (perdidos !== undefined) {
+      const perdidosNuevos = parseInt(perdidos);
+      if (isNaN(perdidosNuevos) || perdidosNuevos < 0) {
+        return res.status(400).json({ mensaje: 'Los perdidos deben ser un número positivo' });
+      }
+      clan.perdidos = perdidosNuevos;
+    }
 
     await torneo.save();
     res.json({
-      mensaje: 'Puntos actualizados exitosamente',
+      mensaje: 'Estadísticas actualizadas exitosamente',
       torneo
     });
   } catch (error) {
-    res.status(400).json({ mensaje: 'Error al actualizar puntos', error: error.message });
+    res.status(400).json({ mensaje: 'Error al actualizar estadísticas', error: error.message });
   }
 });
 
