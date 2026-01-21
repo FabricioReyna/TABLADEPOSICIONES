@@ -32,7 +32,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
     
     setGuardando(true);
     try {
-      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}/estadisticas`, {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${encodeURIComponent(nombreClan)}/estadisticas`, {
         puntos: nuevosPuntos
       });
       setToast({ mensaje: `Puntos ${cambio > 0 ? 'incrementados' : 'decrementados'} exitosamente`, tipo: 'success' });
@@ -56,7 +56,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${editandoPuntos}/estadisticas`, {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${encodeURIComponent(editandoPuntos)}/estadisticas`, {
         puntos: puntosNum
       });
       setToast({ mensaje: 'Puntos actualizados exitosamente', tipo: 'success' });
@@ -76,7 +76,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${editando}`, {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${encodeURIComponent(editando)}`, {
         nuevoNombre: nombreEditado.trim()
       });
       setToast({ mensaje: 'Clan actualizado exitosamente', tipo: 'success' });
@@ -97,7 +97,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
 
     setGuardando(true);
     try {
-      await axios.delete(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}`);
+      await axios.delete(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${encodeURIComponent(nombreClan)}`);
       setToast({ mensaje: 'Clan eliminado exitosamente', tipo: 'success' });
       onUpdate();
     } catch (error) {

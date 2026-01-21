@@ -42,7 +42,7 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
   const handleGuardar = async (nombreClan) => {
     setGuardando(true);
     try {
-      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}/estadisticas`, valores);
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${encodeURIComponent(nombreClan)}/estadisticas`, valores);
       setToast({ mensaje: 'Estadísticas actualizadas exitosamente', tipo: 'success' });
       setEditando(null);
       setValores({});
