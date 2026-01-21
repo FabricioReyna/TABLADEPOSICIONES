@@ -402,6 +402,42 @@ router.delete('/:id/clanes/:nombreClan', async (req, res) => {
   }
 });
 
+// Actualizar puntos manualmente de un clan
+router.put('/:id/clanes/:nombreClan/puntos', async (req, res) => {
+  try {
+    const { nombreClan } = req.params;
+    const { puntos } = req.body;
+    const torneo = await Torneo.findById(req.params.id);
+    
+    if (!torneo) {
+      return res.status(404).json({ mensaje: 'Torneo no encontrado' });
+    }
+
+    // Buscar el clan
+    const clan = torneo.tablaPosiciones.find(c => c.clan === nombreClan);
+    if (!clan) {
+      return res.status(404).json({ mensaje: 'Clan no encontrado' });
+    }
+
+    // Validar que puntos sea un número válido
+    const puntosNuevos = parseInt(puntos);
+    if (isNaN(puntosNuevos) || puntosNuevos < 0) {
+      return res.status(400).json({ mensaje: 'Los puntos deben ser un número positivo' });
+    }
+
+    // Actualizar puntos
+    clan.puntos = puntosNuevos;
+
+    await torneo.save();
+    res.json({
+      mensaje: 'Puntos actualizados exitosamente',
+      torneo
+    });
+  } catch (error) {
+    res.status(400).json({ mensaje: 'Error al actualizar puntos', error: error.message });
+  }
+});
+
 // Organizar Jornada 7 - Playoff especial
 router.post('/:id/organizar-playoff', async (req, res) => {
   try {

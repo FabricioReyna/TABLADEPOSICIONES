@@ -7,6 +7,8 @@ import './GestionClanes.css';
 function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
   const [editando, setEditando] = useState(null);
   const [nombreEditado, setNombreEditado] = useState('');
+  const [editandoPuntos, setEditandoPuntos] = useState(null);
+  const [puntosEditados, setPuntosEditados] = useState('');
   const [nuevoClan, setNuevoClan] = useState('');
   const [guardando, setGuardando] = useState(false);
   const [toast, setToast] = useState(null);
@@ -15,6 +17,58 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
   const handleEditar = (clan) => {
     setEditando(clan.clan);
     setNombreEditado(clan.clan);
+  };
+
+  const handleEditarPuntos = (clan) => {
+    setEditandoPuntos(clan.clan);
+    setPuntosEditados(clan.puntos.toString());
+  };
+
+  const handleAjustarPuntos = async (nombreClan, cambio) => {
+    const clan = clanes.find(c => c.clan === nombreClan);
+    if (!clan) return;
+
+    const nuevosPuntos = Math.max(0, clan.puntos + cambio);
+    
+    setGuardando(true);
+    try {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${nombreClan}/puntos`, {
+        puntos: nuevosPuntos
+      });
+      setToast({ mensaje: `Puntos ${cambio > 0 ? 'incrementados' : 'decrementados'} exitosamente`, tipo: 'success' });
+      onUpdate();
+    } catch (error) {
+      console.error('Error al ajustar puntos:', error);
+      setToast({ mensaje: 'Error al ajustar los puntos', tipo: 'error' });
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  const handleGuardarPuntos = async () => {
+    if (editandoPuntos === null) return;
+
+    const puntosNum = parseInt(puntosEditados);
+    if (isNaN(puntosNum) || puntosNum < 0) {
+      setToast({ mensaje: 'Los puntos deben ser un número positivo', tipo: 'error' });
+      return;
+    }
+
+    setGuardando(true);
+    try {
+      await axios.put(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/clanes/${editandoPuntos}/puntos`, {
+        puntos: puntosNum
+      });
+      setToast({ mensaje: 'Puntos actualizados exitosamente', tipo: 'success' });
+      setEditandoPuntos(null);
+      setPuntosEditados('');
+      onUpdate();
+    } catch (error) {
+      console.error('Error al editar puntos:', error);
+      setToast({ mensaje: 'Error al editar los puntos', tipo: 'error' });
+    } finally {
+      setGuardando(false);
+    }
   };
 
   const handleGuardarEdicion = async () => {
@@ -156,6 +210,40 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
                       </button>
                     </div>
                   </div>
+                ) : editandoPuntos === clan.clan ? (
+                  <div className="clan-edit">
+                    <span className="clan-nombre">{clan.clan}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <input
+                        type="number"
+                        value={puntosEditados}
+                        onChange={(e) => setPuntosEditados(e.target.value)}
+                        min="0"
+                        style={{ width: '80px' }}
+                        autoFocus
+                      />
+                      <span>Pts</span>
+                    </div>
+                    <div className="clan-edit-actions">
+                      <button 
+                        className="btn-guardar-edit"
+                        onClick={handleGuardarPuntos}
+                        disabled={guardando}
+                      >
+                        ✅
+                      </button>
+                      <button 
+                        className="btn-cancelar-edit"
+                        onClick={() => {
+                          setEditandoPuntos(null);
+                          setPuntosEditados('');
+                        }}
+                        disabled={guardando}
+                      >
+                        ❌
+                      </button>
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <div className="clan-info">
@@ -166,12 +254,36 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
                     </div>
                     <div className="clan-actions">
                       <button 
+                        className="btn-puntos-ajuste"
+                        onClick={() => handleAjustarPuntos(clan.clan, -1)}
+                        disabled={guardando || clan.puntos === 0}
+                        title="Restar 1 punto"
+                      >
+                        ➖
+                      </button>
+                      <button 
+                        className="btn-puntos-ajuste"
+                        onClick={() => handleAjustarPuntos(clan.clan, 1)}
+                        disabled={guardando}
+                        title="Sumar 1 punto"
+                      >
+                        ➕
+                      </button>
+                      <button 
                         className="btn-editar"
                         onClick={() => handleEditar(clan)}
                         disabled={guardando}
                         title="Editar nombre del clan"
                       >
                         ✏️ Editar
+                      </button>
+                      <button 
+                        className="btn-editar"
+                        onClick={() => handleEditarPuntos(clan)}
+                        disabled={guardando}
+                        title="Editar puntos manualmente"
+                      >
+                        🎯 Puntos
                       </button>
                       <button 
                         className="btn-eliminar"

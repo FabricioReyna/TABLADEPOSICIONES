@@ -156,7 +156,8 @@
 }
 
 .btn-editar,
-.btn-eliminar {
+.btn-eliminar,
+.btn-puntos-ajuste {
   padding: 10px 20px;
   border: none;
   border-radius: 10px;
@@ -164,6 +165,24 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.btn-puntos-ajuste {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  padding: 10px 15px;
+  font-size: 1.2rem;
+}
+
+.btn-puntos-ajuste:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+}
+
+.btn-puntos-ajuste:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .btn-editar {
