@@ -73,6 +73,7 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
               <th>PG</th>
               <th>PP</th>
               <th>Pts</th>
+              {puedeEditar && <th>Acciones</th>}
             </tr>
           </thead>
           <tbody>
@@ -159,24 +160,28 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
                     </>
                   )}
 
-                  {estaEditando && (
-                    <td className="acciones-cell" colSpan={puedeEditar ? 1 : 0}>
-                      <button 
-                        className="btn-guardar-tabla"
-                        onClick={() => handleGuardar(equipo.clan)}
-                        disabled={guardando}
-                        title="Guardar cambios"
-                      >
-                        ✅
-                      </button>
-                      <button 
-                        className="btn-cancelar-tabla"
-                        onClick={handleCancelar}
-                        disabled={guardando}
-                        title="Cancelar edición"
-                      >
-                        ❌
-                      </button>
+                  {puedeEditar && (
+                    <td className="acciones-cell">
+                      {estaEditando ? (
+                        <>
+                          <button 
+                            className="btn-guardar-tabla"
+                            onClick={() => handleGuardar(equipo.clan)}
+                            disabled={guardando}
+                            title="Guardar cambios"
+                          >
+                            ✅
+                          </button>
+                          <button 
+                            className="btn-cancelar-tabla"
+                            onClick={handleCancelar}
+                            disabled={guardando}
+                            title="Cancelar edición"
+                          >
+                            ❌
+                          </button>
+                        </>
+                      ) : null}
                     </td>
                   )}
                 </tr>
