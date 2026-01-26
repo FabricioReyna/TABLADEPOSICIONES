@@ -26,6 +26,7 @@ function AppContent() {
   const [loading, setLoading] = useState(true);
   const [mostrarLogin, setMostrarLogin] = useState(false);
   const [vistaActiva, setVistaActiva] = useState('tabla'); // 'tabla', 'jornadas', 'clanes', 'obs'
+  const [copiadoAnimacion, setCopiadoAnimacion] = useState(false);
   const { estaAutenticado, esAdmin } = useAuth();
 
   // Obtener el torneo de clanes
@@ -170,13 +171,14 @@ function AppContent() {
                       onClick={(e) => e.target.select()}
                     />
                     <button 
-                      className="btn-copy"
+                      className={`btn-copy ${copiadoAnimacion ? 'copiado' : ''}`}
                       onClick={() => {
                         navigator.clipboard.writeText(`${window.location.origin}/top3`);
-                      
+                        setCopiadoAnimacion(true);
+                        setTimeout(() => setCopiadoAnimacion(false), 2000);
                       }}
                     >
-                      📋 Copiar
+                      {copiadoAnimacion ? '✅ ¡Copiado!' : '📋 Copiar'}
                     </button>
                   </div>
                   <p className="url-info">Esta URL muestra el TOP 3 con la configuración estándar</p>

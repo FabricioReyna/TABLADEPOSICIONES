@@ -264,6 +264,32 @@
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
 }
 
+.btn-copy.copiado {
+  animation: pulso 0.6s ease-out, colorChange 0.6s ease-out;
+  background: linear-gradient(135deg, #00d084 0%, #00ff88 100%);
+}
+
+@keyframes pulso {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes colorChange {
+  0% {
+    color: #000;
+  }
+  100% {
+    color: #000;
+  }
+}
+
 .obs-instructions {
   background: rgba(20, 20, 20, 0.6);
   border-left: 4px solid #87cefa;

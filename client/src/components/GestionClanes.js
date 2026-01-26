@@ -14,6 +14,14 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
   const [toast, setToast] = useState(null);
   const [modalEliminar, setModalEliminar] = useState(null);
 
+  const obtenerClaseClан = (nombreClan) => {
+    const nombreLower = nombreClan.toLowerCase();
+    if (nombreLower.includes('vegetta')) return 'clan-vegetta';
+    if (nombreLower.includes('lobos nocturnos') || nombreLower.includes('lobos')) return 'clan-lobos';
+    if (nombreLower.includes('willy')) return 'clan-willy';
+    return '';
+  };
+
   const handleEditar = (clan) => {
     setEditando(clan.clan);
     setNombreEditado(clan.clan);
@@ -180,7 +188,7 @@ function GestionClanes({ clanes, torneoId, onUpdate, puedeEditar }) {
           {clanes
             .sort((a, b) => a.clan.localeCompare(b.clan))
             .map((clan) => (
-              <div key={clan.clan} className="clan-item">
+              <div key={clan.clan} className={`clan-item ${obtenerClaseClан(clan.clan)}`}>
                 {editando === clan.clan ? (
                   <div className="clan-edit">
                     <input

@@ -153,27 +153,55 @@ function Top3() {
       className={`top3-container bg-${config.bg} ${config.transparente ? 'transparente' : ''} fuente-${config.tamañoFuente} ${config.animaciones ? 'con-animaciones' : ''} ${config.borde ? 'con-borde' : 'sin-borde'}`}
       style={{ width: `${config.ancho}px`, height: `${config.altura}px` }}
     >
-      <div className="top3-header">
-        <h1>{config.titulo}</h1>
-      </div>
+      <div className="top3-wrapper">
+        <div className="top3-header">
+          <h1>{config.titulo}</h1>
+        </div>
 
-      <div className="top3-table">
-        {topClanes.map((clanData, index) => (
-          <div 
-            key={index} 
-            className={`top3-row ${config.coloresClan ? obtenerClaseEspecial(clanData.clan) : ''}`}
-          >
-            <div className="top3-posicion">
-              <span className="numero">{index + 1}</span>
-            </div>
-            <div className="top3-clan">{clanData.clan}</div>
-            <div className="top3-stats">
-              <div className="stat-puntos">
-                <span className="stat-valor">{clanData.puntos}</span>
+        <div className="top3-content">
+          <div className="top3-table">
+            {topClanes.map((clanData, index) => (
+              <div 
+                key={index} 
+                className={`top3-row top3-position-${index} ${config.coloresClan ? obtenerClaseEspecial(clanData.clan) : ''}`}
+              >
+                <div className="top3-left">
+                  {config.mostrarMedallas && (
+                    <div className="top3-medalla">
+                      <span className="medalla">
+                        {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
+                      </span>
+                    </div>
+                  )}
+                  {config.mostrarNumeros && !config.mostrarMedallas && (
+                    <div className="top3-posicion">
+                      <span className="numero">#{index + 1}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="top3-clan-info">
+                  <span className="top3-clan">{clanData.clan}</span>
+                </div>
+
+                <div className="top3-stats">
+                  {config.mostrarPuntos && (
+                    <div className="stat-puntos">
+                      <span className="stat-label">Pts:</span>
+                      <span className="stat-valor">{clanData.puntos}</span>
+                    </div>
+                  )}
+                  {config.mostrarVictorias && (
+                    <div className="stat-victorias">
+                      <span className="stat-label">V:</span>
+                      <span className="stat-valor">{clanData.ganados}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
