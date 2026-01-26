@@ -122,7 +122,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
 
     setGuardando(true);
     try {
-      // Calcular puntos y actualizar tabla
+      // Finalizar jornada sin actualizar puntos
       await axios.post(`/api/torneos/${torneoId}/finalizar-jornada`, {
         jornadaNumero,
         resultados: {
@@ -130,8 +130,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
           dia2: jornada.dia2.resultados
         }
       });
-      alert('✅ Jornada finalizada y puntos actualizados');
-      onUpdate();
+      alert('✅ Jornada finalizada');
     } catch (error) {
       console.error('Error al finalizar jornada:', error);
       alert('❌ Error al finalizar la jornada');

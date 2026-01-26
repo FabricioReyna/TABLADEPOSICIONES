@@ -173,7 +173,7 @@ function AppContent() {
                       className="btn-copy"
                       onClick={() => {
                         navigator.clipboard.writeText(`${window.location.origin}/top3`);
-                        alert('✅ URL copiada al portapapeles!');
+                      
                       }}
                     >
                       📋 Copiar
