@@ -57,7 +57,7 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
 
   const handleChange = (campo, valor) => {
     const valorNum = parseInt(valor) || 0;
-    setValores(prev => ({ ...prev, [campo]: Math.max(0, valorNum) }));
+    setValores(prev => ({ ...prev, [campo]: valorNum }));
   };
 
   return (
