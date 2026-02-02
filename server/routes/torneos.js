@@ -419,35 +419,35 @@ router.put('/:id/clanes/:nombreClan/estadisticas', async (req, res) => {
       return res.status(404).json({ mensaje: 'Clan no encontrado' });
     }
 
-    // Actualizar campos proporcionados con validación
+    // Actualizar campos proporcionados sin restricción de negativos
     if (puntos !== undefined) {
       const puntosNuevos = parseInt(puntos);
-      if (isNaN(puntosNuevos) || puntosNuevos < 0) {
-        return res.status(400).json({ mensaje: 'Los puntos deben ser un número positivo' });
+      if (isNaN(puntosNuevos)) {
+        return res.status(400).json({ mensaje: 'Los puntos deben ser un número válido' });
       }
       clan.puntos = puntosNuevos;
     }
 
     if (partidos !== undefined) {
       const partidosNuevos = parseInt(partidos);
-      if (isNaN(partidosNuevos) || partidosNuevos < 0) {
-        return res.status(400).json({ mensaje: 'Los partidos deben ser un número positivo' });
+      if (isNaN(partidosNuevos)) {
+        return res.status(400).json({ mensaje: 'Los partidos deben ser un número válido' });
       }
       clan.partidos = partidosNuevos;
     }
 
     if (ganados !== undefined) {
       const ganadosNuevos = parseInt(ganados);
-      if (isNaN(ganadosNuevos) || ganadosNuevos < 0) {
-        return res.status(400).json({ mensaje: 'Los ganados deben ser un número positivo' });
+      if (isNaN(ganadosNuevos)) {
+        return res.status(400).json({ mensaje: 'Los ganados deben ser un número válido' });
       }
       clan.ganados = ganadosNuevos;
     }
 
     if (perdidos !== undefined) {
       const perdidosNuevos = parseInt(perdidos);
-      if (isNaN(perdidosNuevos) || perdidosNuevos < 0) {
-        return res.status(400).json({ mensaje: 'Los perdidos deben ser un número positivo' });
+      if (isNaN(perdidosNuevos)) {
+        return res.status(400).json({ mensaje: 'Los perdidos deben ser un número válido' });
       }
       clan.perdidos = perdidosNuevos;
     }
