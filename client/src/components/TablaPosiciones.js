@@ -120,7 +120,6 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
                           className="edit-input"
                           value={valores.partidos}
                           onChange={(e) => handleChange('partidos', e.target.value)}
-                          min="0"
                         />
                       </td>
                       <td>
@@ -129,7 +128,6 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
                           className="edit-input ganados"
                           value={valores.ganados}
                           onChange={(e) => handleChange('ganados', e.target.value)}
-                          min="0"
                         />
                       </td>
                       <td>
@@ -138,7 +136,6 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
                           className="edit-input perdidos"
                           value={valores.perdidos}
                           onChange={(e) => handleChange('perdidos', e.target.value)}
-                          min="0"
                         />
                       </td>
                       <td>
@@ -147,7 +144,6 @@ function TablaPosiciones({ tablaPosiciones, torneoId, puedeEditar, onUpdate }) {
                           className="edit-input puntos"
                           value={valores.puntos}
                           onChange={(e) => handleChange('puntos', e.target.value)}
-                          min="0"
                         />
                       </td>
                     </>
