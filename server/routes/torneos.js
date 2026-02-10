@@ -291,6 +291,10 @@ router.post('/:id/clanes', async (req, res) => {
       perdidos: 0
     });
 
+    if (!torneo.equipos.includes(nombre)) {
+      torneo.equipos.push(nombre);
+    }
+
     await torneo.save();
     res.json({
       mensaje: 'Clan agregado exitosamente',
@@ -326,6 +330,11 @@ router.put('/:id/clanes/:nombreClan', async (req, res) => {
 
     // Actualizar nombre en tabla de posiciones
     clan.clan = nuevoNombre;
+
+    // Actualizar nombre en lista de equipos
+    if (Array.isArray(torneo.equipos)) {
+      torneo.equipos = torneo.equipos.map(e => e === nombreClan ? nuevoNombre : e);
+    }
 
     // Actualizar en todas las jornadas
     torneo.jornadas.forEach(jornada => {
@@ -371,6 +380,10 @@ router.delete('/:id/clanes/:nombreClan', async (req, res) => {
 
     // Eliminar de tabla de posiciones
     torneo.tablaPosiciones = torneo.tablaPosiciones.filter(c => c.clan !== nombreClan);
+
+    if (Array.isArray(torneo.equipos)) {
+      torneo.equipos = torneo.equipos.filter(e => e !== nombreClan);
+    }
 
     // Eliminar de todas las jornadas
     torneo.jornadas.forEach(jornada => {

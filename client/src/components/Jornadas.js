@@ -140,14 +140,56 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
   };
 
   const randomizarEncuentros = () => {
-    const todasLasJornadas = [...jornadasTemp];
-    const clanes = [...new Set(todasLasJornadas.flatMap(j => [...j.dia1.equipos, ...j.dia2.equipos]))];
+    const TOTAL_JORNADAS = 12;
+    const jornadasOriginales = [...jornadasTemp];
+    let todasLasJornadas = [...jornadasTemp];
+
+    // Si faltan jornadas, crearlas sin tocar las ya existentes
+    if (todasLasJornadas.length < TOTAL_JORNADAS) {
+      const numerosExistentes = todasLasJornadas.map(j => j.numero);
+      const maxNumero = numerosExistentes.length ? Math.max(...numerosExistentes) : 0;
+
+      const fechas = todasLasJornadas
+        .flatMap(j => [j?.dia1?.fecha, j?.dia2?.fecha])
+        .filter(Boolean)
+        .map(f => new Date(f));
+
+      let fechaBase = fechas.length
+        ? new Date(Math.max(...fechas.map(f => f.getTime())))
+        : new Date();
+
+      const nuevas = [];
+      for (let numero = maxNumero + 1; numero <= TOTAL_JORNADAS; numero++) {
+        const dia1Fecha = new Date(fechaBase);
+        dia1Fecha.setDate(dia1Fecha.getDate() + 1);
+        const dia2Fecha = new Date(dia1Fecha);
+        dia2Fecha.setDate(dia2Fecha.getDate() + 1);
+
+        nuevas.push({
+          numero,
+          completada: false,
+          dia1: { fecha: dia1Fecha, equipos: [], resultados: [] },
+          dia2: { fecha: dia2Fecha, equipos: [], resultados: [] }
+        });
+
+        fechaBase = new Date(dia2Fecha);
+      }
+
+      todasLasJornadas = [...todasLasJornadas, ...nuevas];
+    }
+
+    const clanes = [...new Set(todasLasJornadas.flatMap(j => [...j.dia1.equipos, ...j.dia2.equipos]).filter(Boolean))];
+
+    const jornadaTieneResultados = (jornada) =>
+      (jornada.dia1.resultados?.length > 0) || (jornada.dia2.resultados?.length > 0);
+    const esJornadaFija = (jornada) => jornada.completada || jornadaTieneResultados(jornada);
     
-    // Registrar TODOS los enfrentamientos existentes desde la jornada 1
+    // Registrar SOLO los enfrentamientos de jornadas ya hechas (para no modificarlas)
     const enfrentamientosExistentes = new Set();
-    
-    // Primero: Registrar todos los enfrentamientos que ya existen en TODAS las jornadas
+
     todasLasJornadas.forEach(jornada => {
+      if (!esJornadaFija(jornada)) return;
+
       // Revisar día 1
       for (let i = 0; i < jornada.dia1.equipos.length; i += 2) {
         const eq1 = jornada.dia1.equipos[i];
@@ -214,14 +256,12 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       return null; // No se pudo encontrar una configuración válida después de muchos intentos
     };
 
-    // Randomizar TODAS las jornadas con la garantía de no repetir
-    const nuevasJornadas = todasLasJornadas.map((jornada, index) => {
-      // Verificar si la jornada tiene resultados (si los tiene, no randomizar)
-      const tieneResultados = (jornada.dia1.resultados?.length > 0) || (jornada.dia2.resultados?.length > 0);
-      
-      if (tieneResultados) {
-        console.log(`⏭️ Jornada ${jornada.numero} - Mantener (tiene resultados)`);
-        return jornada; // No randomizar jornadas con resultados
+    // Randomizar solo jornadas NO hechas
+    let falloGeneracion = false;
+    const nuevasJornadas = todasLasJornadas.map((jornada) => {
+      if (esJornadaFija(jornada)) {
+        console.log(`⏭️ Jornada ${jornada.numero} - Mantener (ya hecha)`);
+        return jornada; // No randomizar jornadas hechas
       }
 
       console.log(`🎲 Generando Jornada ${jornada.numero}...`);
@@ -230,10 +270,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       const equiposDia1 = generarEmparejamientos(clanes);
       if (!equiposDia1) {
         console.error(`❌ No se pudo generar día 1 para Jornada ${jornada.numero}`);
-        setToast({ 
-          mensaje: `⚠️ No se pudieron generar más encuentros únicos en Jornada ${jornada.numero}. Se alcanzó el límite de combinaciones posibles.`, 
-          tipo: 'error' 
-        });
+        falloGeneracion = true;
         return jornada; // Mantener la jornada sin cambios
       }
 
@@ -241,10 +278,7 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       const equiposDia2 = generarEmparejamientos(clanes);
       if (!equiposDia2) {
         console.error(`❌ No se pudo generar día 2 para Jornada ${jornada.numero}`);
-        setToast({ 
-          mensaje: `⚠️ No se pudieron generar más encuentros únicos en Jornada ${jornada.numero}. Se alcanzó el límite de combinaciones posibles.`, 
-          tipo: 'error' 
-        });
+        falloGeneracion = true;
         return jornada; // Mantener la jornada sin cambios
       }
 
@@ -265,9 +299,18 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       };
     });
     
+    if (falloGeneracion) {
+      setToast({ 
+        mensaje: '⚠️ No se pudieron generar más encuentros únicos. Se mantuvieron las jornadas actuales.', 
+        tipo: 'error' 
+      });
+      setJornadasTemp(jornadasOriginales);
+      return;
+    }
+
     setJornadasTemp(nuevasJornadas);
     setToast({ 
-      mensaje: '✅ Encuentros randomizados sin repetir ningún enfrentamiento desde la Jornada 1', 
+      mensaje: '✅ Encuentros reordenados sin repetir enfrentamientos en jornadas pendientes', 
       tipo: 'success' 
     });
   };
@@ -394,23 +437,6 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
       tipo: 'success' 
     });
   };
-  // Organizar Playoff (Jornada 7)
-  const organizarPlayoff = async () => {
-    setGuardando(true);
-    try {
-      await axios.post(`https://tabladeposiciones.onrender.com/api/torneos/${torneoId}/organizar-playoff`);
-      setToast({ 
-        mensaje: `🏆 Jornada 7 organizada! Top 6 vs Posiciones 7-12`, 
-        tipo: 'success' 
-      });
-      onUpdate();
-    } catch (error) {
-      console.error('Error al organizar playoff:', error);
-      setToast({ mensaje: 'Error al organizar el playoff', tipo: 'error' });
-    } finally {
-      setGuardando(false);
-    }
-  };
   // Separar jornadas activas y completadas
   const jornadasActivas = jornadasTemp.filter(j => !j.completada);
   const jornadasCompletadas = jornadasTemp.filter(j => j.completada);
@@ -437,34 +463,19 @@ function Jornadas({ jornadas, torneoId, onUpdate, puedeEditar = false }) {
           <div className="jornadas-list">
             {jornadas.map((jornada) => {
               const completa = esJornadaCompleta(jornada);
-              const esJornada7 = jornada.numero === 7;
               return (
-                <div key={jornada.numero} className={`jornada-card ${completa && !jornada.completada ? 'jornada-lista' : ''} ${esJornada7 ? 'jornada-playoff' : ''}`}>
+                <div key={jornada.numero} className={`jornada-card ${completa && !jornada.completada ? 'jornada-lista' : ''}`}>
                   <div 
                     className="jornada-header"
                     onClick={() => toggleJornada(jornada.numero)}
                   >
                     <div className="jornada-titulo">
                       <span className="jornada-numero">
-                        {esJornada7 ? '🏆 ' : ''}Jornada {jornada.numero}
-                        {esJornada7 && ' - PLAYOFF FINAL'}
+                        Jornada {jornada.numero}
                         {completa && !jornada.completada && ' ✓'}
                       </span>
                     </div>
                     <div className="jornada-header-right">
-                      {esJornada7 && puedeEditar && (
-                        <button 
-                          className="btn-organizar-playoff"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            organizarPlayoff();
-                          }}
-                          disabled={guardando}
-                          title="Organizar equipos según tabla de posiciones"
-                        >
-                          🎯 Organizar Playoff
-                        </button>
-                      )}
                       {completa && !jornada.completada && puedeEditar && (
                         <button 
                           className="btn-finalizar-jornada"

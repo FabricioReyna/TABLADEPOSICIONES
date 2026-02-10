@@ -10,25 +10,13 @@ function generarJornadas(clanes, fechaInicio) {
   const clonesArray = [...clanes];
   let fechaActual = new Date(fechaInicio);
   
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 1; i <= 12; i++) {
     let equiposDia1, equiposDia2;
     
-    // Jornada 7 es especial - Playoff
-    if (i === 7) {
-      // Para la jornada 7, los equipos se organizarán según la tabla de posiciones
-      // Los top 6 pelean entre ellos (día 1)
-      // Los bottom 6 (del 7 al 12) pelean entre ellos (día 2)
-      // Nota: La organización real se hará cuando la jornada esté lista para jugarse
-      // Por ahora dejamos los equipos mezclados como placeholder
-      const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
-      equiposDia1 = shuffled.slice(0, 6);
-      equiposDia2 = shuffled.slice(6, 12);
-    } else {
-      // Jornadas normales: mezclar clanes
-      const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
-      equiposDia1 = shuffled.slice(0, 6);
-      equiposDia2 = shuffled.slice(6, 12);
-    }
+    // Jornadas normales: mezclar clanes
+    const shuffled = [...clonesArray].sort(() => Math.random() - 0.5);
+    equiposDia1 = shuffled.slice(0, 6);
+    equiposDia2 = shuffled.slice(6, 12);
     
     // Día 1: primeros 6 equipos (3 partidos 1 vs 1)
     const dia1Fecha = new Date(fechaActual);
@@ -39,18 +27,15 @@ function generarJornadas(clanes, fechaInicio) {
     
     jornadas.push({
       numero: i,
-      esPlayoff: i === 7,
       dia1: {
         fecha: dia1Fecha,
         equipos: equiposDia1,
-        resultados: [],
-        descripcion: i === 7 ? 'TOP 6 - Playoff' : null
+        resultados: []
       },
       dia2: {
         fecha: dia2Fecha,
         equipos: equiposDia2,
-        resultados: [],
-        descripcion: i === 7 ? 'Posiciones 7-12' : null
+        resultados: []
       }
     });
     
@@ -62,7 +47,7 @@ function generarJornadas(clanes, fechaInicio) {
 }
 
 // Datos iniciales
-const clanes = ['501th', 'Tripulantes (Roier)', 'Terrible (Focus)', 'vahalla', 'Stormentados', 'resistencia', 'Esclavos_De_Hestia (Nia)', 'Core', 'Arnor (Alexby11)', 'Lobos Nocturnos (Vegetta)', 'Hermandad Oscuro (WillyREX)', 'KOKITOS'];
+const clanes = ['501th', 'Tripulantes (Roier)', 'Terrible (Focus)', 'vahalla', 'Stormentados', 'resistencia', 'Esclavos_De_Hestia (Nia)', 'Cachorros', 'Arnor (Alexby11)', 'Lobos Nocturnos (Vegetta)', 'Hermandad Oscuro (WillyREX)', 'KOKITOS'];
 const fechaInicio = new Date('2026-02-15');
 
 const torneos = [
